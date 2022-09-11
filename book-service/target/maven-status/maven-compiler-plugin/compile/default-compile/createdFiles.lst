@@ -1,0 +1,10 @@
+com\book\BookRepository.class
+com\book\BookServiceApplication.class
+com\book\entity\Book.class
+com\book\entity\Reader.class
+com\book\AuthorRepository.class
+com\book\controller\BaseController.class
+com\book\controller\BookController.class
+com\book\entity\Author.class
+com\book\service\AuthorService.class
+com\book\service\BookService.class
