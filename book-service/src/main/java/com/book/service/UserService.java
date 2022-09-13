@@ -14,7 +14,7 @@ import com.book.entity.User;
 
 public interface UserService {
 
-	User getAuthor(int authorId, ERole roleAuthor);
+	User getUser(int userId, ERole roleUser);
 	
 	//public User saveAuthor(@Valid User user);
 }

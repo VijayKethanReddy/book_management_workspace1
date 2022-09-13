@@ -32,12 +32,12 @@ public class UserServiceImpl implements UserService{
 	RoleRepository roleRepository;
 	
 	@Override
-	public User getAuthor(int authorId, ERole roleAuthor) {
+	public User getUser(int userId, ERole roleUser) {
 		User user = null;
-		Role authorRole = roleRepository.findByName(roleAuthor)
+		Role userRole = roleRepository.findByName(roleUser)
 				.orElseThrow(() -> new RuntimeException(BookConstants.ERROR_ROLE_NOT_FOUND_MSG));
-		Optional<User> userOptional = userRepository.findById(authorId);
-		if(userOptional.isPresent() && userOptional.get().getRoles().contains(authorRole)) {
+		Optional<User> userOptional = userRepository.findById(userId);
+		if(userOptional.isPresent() && userOptional.get().getRoles().contains(userRole)) {
 			user = userOptional.get();
 		}
 		return user;
