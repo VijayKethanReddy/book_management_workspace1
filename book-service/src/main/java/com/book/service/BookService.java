@@ -16,7 +16,7 @@ public interface BookService {
 
 	public Book saveBook(Book book);
 
-	public List<Book> searchBooks(String category, String author, BigDecimal price, String publisher);
+	public List<Book> searchBooks(String title, String category, String author, BigDecimal price, String publisher);
 
 	public Book getBook(Integer bookId);
 

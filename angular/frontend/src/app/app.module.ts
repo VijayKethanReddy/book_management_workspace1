@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserformComponent } from './userform/userform.component';
 import { HttpClientModule } from '@angular/common/http';
+import { BookformComponent } from './bookform/bookform.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserformComponent
+    BookformComponent
   ],
   imports: [
     BrowserModule,

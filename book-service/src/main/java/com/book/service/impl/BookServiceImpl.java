@@ -33,12 +33,12 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public List<Book> searchBooks(String category, String author, BigDecimal price, String publisher) {
+	public List<Book> searchBooks(String title, String category, String author, BigDecimal price, String publisher) {
 		List<Book> listOfBooks = new ArrayList<>();
 		List<Book> bookList = bookRepository.findAll();
 		if(!bookList.isEmpty()) {
 			listOfBooks = bookList.stream().
-			filter(book -> book.getCategory().toString().equals(category) || 
+			filter(book -> book.getTitle().equals(title) || book.getCategory().toString().equals(category) || 
 					book.getAuthorName().equalsIgnoreCase(author) || (book.getPrice() == price) 
 					|| book.getPublisher().equalsIgnoreCase(publisher)).collect(Collectors.toList());
 		}

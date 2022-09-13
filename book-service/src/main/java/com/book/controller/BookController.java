@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 
+@CrossOrigin
 @Slf4j
 @RestController
 @RequestMapping("/digitalbooks")
@@ -62,18 +64,18 @@ public class BookController extends BaseController {
 	PaymentService paymentService;
 
 	@GetMapping("/books/search")
-	@PreAuthorize("hasRole('READER') or hasRole('AUTHOR')")
-	public ResponseEntity<List<Book>> searchBooks(@RequestParam String category, 
+	//@PreAuthorize("hasRole('READER') or hasRole('AUTHOR')")
+	public ResponseEntity<List<Book>> searchBooks(@RequestParam String title, @RequestParam String category, 
 			@RequestParam String author, @RequestParam BigDecimal price, 
 			@RequestParam String publisher) {
 		ResponseEntity<List<Book>> response;
-		List<Book> listOfBooks = bookService.searchBooks(category, author, price, publisher);
+		List<Book> listOfBooks = bookService.searchBooks(title, category, author, price, publisher);
 		response = new ResponseEntity<>(listOfBooks, HttpStatus.OK);
 		return response;
 	}
 	
 	@PostMapping("/author/{authorId}/books")
-	@PreAuthorize("hasRole('AUTHOR')")
+	//@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> saveBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
 		ResponseEntity<Integer> response;
 		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);

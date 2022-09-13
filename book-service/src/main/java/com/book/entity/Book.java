@@ -56,8 +56,8 @@ public class Book {
 	private String publisher;
 	
 	@NotNull(message = "publishedDate cannot be blank#######")
-	@DateTimeFormat(style = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(style = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate publishedDate;
 	
 	@NotBlank(message = "content cannot be blank#######")

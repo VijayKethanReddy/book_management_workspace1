@@ -1,0 +1,70 @@
+<p>bookform</p>
+<p>Create Books</p>
+<div>
+    <label>Title</label>
+    <input [(ngModel)] = 'book.title'/>
+</div>
+<div>
+    <label>Image</label>
+    <input [(ngModel)] = 'book.logo'/>
+</div>
+<div>
+    <label>Category</label>
+    <select [(ngModel)]="book.category">
+        <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
+    </select>
+</div>
+<div>
+    <label>Price</label>
+    <input [(ngModel)] = 'book.price' type='number'/>
+</div>
+<div>
+    <label>Publisher</label>
+    <input [(ngModel)] = 'book.publisher'/>
+</div>
+<div>
+    <label>Published Date</label>
+    <input type="date" [(ngModel)] = 'book.publishedDate'/>
+</div>
+<div>
+    <label>Content</label>
+    <input [(ngModel)] = 'book.content'/>
+</div>
+<div>
+    <label>Active</label>
+    <input type="radio" value=true [(ngModel)]='book.active'>True
+    <input type="radio" value=false [(ngModel)]='book.active'>False
+</div>
+<button (click)='save()'>Save</button>
+<p>Search Books</p>
+<div>
+    <label>Title</label>
+    <input [(ngModel)] = 'title'/>
+</div>
+<div>
+    <label>Category</label>
+    <select [(ngModel)]="category">
+        <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
+    </select>
+</div>
+<div>
+    <label>Author</label>
+    <input [(ngModel)] = 'author'/>
+</div>
+<div>
+    <label>Price</label>
+    <input [(ngModel)] = 'price' type='number'/>
+</div>
+<div>
+    <label>Publisher</label>
+    <input [(ngModel)] = 'publisher'/>
+</div>
+<button (click)='searchBooks()'>Search</button>
+
+<p>Search Result</p>
+<ol>
+    <li *ngFor='let book of books'>
+        {{book.title}}, {{book.logo}}, {{book.category}}, {{book.authorUserName}}, {{book.authorName}},
+        {{book.price}}, {{book.publisher}}, {{book.publishedDate}}, {{book.content}}, {{book.active}}
+    </li>
+</ol>
