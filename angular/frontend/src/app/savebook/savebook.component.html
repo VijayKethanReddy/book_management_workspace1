@@ -1,0 +1,39 @@
+<p>Create Books</p>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Title</label>
+    <input [(ngModel)] = 'book.title'/>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Image</label>
+    <input [(ngModel)] = 'book.logo'/>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Category</label>
+    <select [(ngModel)]="book.category">
+        <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
+    </select>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Price</label>
+    <input [(ngModel)] = 'book.price' type='number'/>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Publisher</label>
+    <input [(ngModel)] = 'book.publisher'/>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Published Date</label>
+    <input type="date" [(ngModel)] = 'book.publishedDate'/>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Content</label>
+    <input [(ngModel)] = 'book.content'/>
+</div>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Active</label>
+    <input type="radio" value=true [(ngModel)]='book.active'>True
+    <input type="radio" value=false [(ngModel)]='book.active'>False
+</div>
+<button class="btn btn-primary" (click)='save()'>Save</button>
+<br>
+<label>{{message}}</label>

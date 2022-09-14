@@ -6,17 +6,28 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BookformComponent } from './bookform/bookform.component';
+import { SavebookComponent } from './savebook/savebook.component';
+import { AuthGuardService } from './services/auth-guard/auth-guard.service';
+import { RouterModule, Routes } from '@angular/router';
+import { GetallauthorbooksComponent } from './getallauthorbooks/getallauthorbooks.component';
 
+const routes:Routes = [
+  {path: 'bookform', component: BookformComponent},
+  {path: 'savebook', component: SavebookComponent, canActivate: [AuthGuardService]},
+  {path: 'getallauthorbooks', component: GetallauthorbooksComponent}
+]
 @NgModule({
   declarations: [
     AppComponent,
-    BookformComponent
+    BookformComponent,
+    SavebookComponent,
+    GetallauthorbooksComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule, FormsModule, HttpClientModule
+    AppRoutingModule, FormsModule, HttpClientModule, RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

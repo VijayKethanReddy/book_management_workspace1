@@ -96,6 +96,43 @@ public class BookController extends BaseController {
 		return response;
 	}
 	
+	@GetMapping("/author/{authorId}/allbooks")
+	//@PreAuthorize("hasRole('AUTHOR')")
+	public ResponseEntity<List<Book>> getAllAuthorBooks(@PathVariable("authorId") int authorId) {
+		log.debug("Inside getBook method");
+		ResponseEntity<List<Book>> response;
+		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
+		if(user!=null) {
+			List<Book> listOfBooks = bookService.getAllAuthorBooks(user.getUserName());
+			response = new ResponseEntity<>(listOfBooks, HttpStatus.OK);
+		}
+		else {
+			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return response;
+	}
+	
+	@GetMapping("/author/{authorId}/book/{bookId}")
+	//@PreAuthorize("hasRole('AUTHOR')")
+	public ResponseEntity<Book> getAuthorBook(@PathVariable("authorId") int authorId, @PathVariable("bookId") Integer bookId) {
+		log.debug("Inside getBook method");
+		ResponseEntity<Book> response;
+		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
+		if(user!=null) {
+			Book authorBook = bookService.getAuthorBook(bookId, user.getUserName());
+			if(authorBook == null) {
+				response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			else {
+				response = new ResponseEntity<>(authorBook, HttpStatus.OK);
+			}
+		}
+		else {
+			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return response;
+	}
+	
 	@PostMapping("/books/{bookId}/buy/{readerId}")
 	@PreAuthorize("hasRole('READER')")
 	public ResponseEntity<Integer> buyBook(@PathVariable("bookId") int bookId, @PathVariable("readerId") int readerId) {
@@ -141,7 +178,7 @@ public class BookController extends BaseController {
 	
 	@GetMapping("/readers/{readerId}/books/{bookId}")
 	@PreAuthorize("hasRole('READER')")
-	public ResponseEntity<Book> getBook(@PathVariable("readerId") int readerId, @PathVariable("bookId") Integer bookId) {
+	public ResponseEntity<Book> findPurchasedBookByBookId(@PathVariable("readerId") int readerId, @PathVariable("bookId") Integer bookId) {
 		log.debug("Inside getBook method");
 		ResponseEntity<Book> response;
 		Book purchasedBook = paymentService.getPurchasedBook(bookId, readerId);

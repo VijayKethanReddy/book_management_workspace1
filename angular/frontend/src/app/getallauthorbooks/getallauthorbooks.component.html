@@ -1,0 +1,28 @@
+<p>All Author Books</p>
+<div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+    <table class="table">
+        <thead>
+            <tr class="table-primary">
+                <th *ngFor="let column of displayedColumns">{{column}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-info" *ngFor="let book of books">
+                <td>{{book.id}}</td>
+                <td>{{book.title}}</td>
+                <td>{{book.logo}}</td>
+                <td>{{book.category}}</td>
+                <td>{{book.authorUserName}}</td>
+                <td>{{book.authorName}}</td>
+                <td>{{book.price}}</td>
+                <td>{{book.publisher}}</td>
+                <td>{{book.publishedDate}}</td>
+                <td>{{book.content}}</td>
+                <td>{{book.active}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</ng-template>
+<ng-template #elseBlock><label >{{message}}</label></ng-template>

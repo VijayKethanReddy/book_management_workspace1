@@ -1,70 +1,60 @@
-<p>bookform</p>
-<p>Create Books</p>
-<div>
-    <label>Title</label>
-    <input [(ngModel)] = 'book.title'/>
-</div>
-<div>
-    <label>Image</label>
-    <input [(ngModel)] = 'book.logo'/>
-</div>
-<div>
-    <label>Category</label>
-    <select [(ngModel)]="book.category">
-        <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
-    </select>
-</div>
-<div>
-    <label>Price</label>
-    <input [(ngModel)] = 'book.price' type='number'/>
-</div>
-<div>
-    <label>Publisher</label>
-    <input [(ngModel)] = 'book.publisher'/>
-</div>
-<div>
-    <label>Published Date</label>
-    <input type="date" [(ngModel)] = 'book.publishedDate'/>
-</div>
-<div>
-    <label>Content</label>
-    <input [(ngModel)] = 'book.content'/>
-</div>
-<div>
-    <label>Active</label>
-    <input type="radio" value=true [(ngModel)]='book.active'>True
-    <input type="radio" value=false [(ngModel)]='book.active'>False
-</div>
-<button (click)='save()'>Save</button>
 <p>Search Books</p>
-<div>
-    <label>Title</label>
-    <input [(ngModel)] = 'title'/>
+<div class="form-row">
+        <label class="col-sm-2 col-form-label">Title</label>
+        <input [(ngModel)] = 'title'/>
 </div>
-<div>
-    <label>Category</label>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Category</label>
     <select [(ngModel)]="category">
         <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
     </select>
 </div>
-<div>
-    <label>Author</label>
+<div class="form-row">
+    <label class="col-sm-2 col-form-label">Author</label>
     <input [(ngModel)] = 'author'/>
 </div>
-<div>
-    <label>Price</label>
+<div class="form-group">
+    <label class="col-sm-2 col-form-label">Price</label>
     <input [(ngModel)] = 'price' type='number'/>
 </div>
-<div>
-    <label>Publisher</label>
+<div class="form-group">
+    <label class="col-sm-2 col-form-label">Publisher</label>
     <input [(ngModel)] = 'publisher'/>
 </div>
-<button (click)='searchBooks()'>Search</button>
-
+<button class="btn btn-primary" (click)='searchBooks()'>Search</button>
 <p>Search Result</p>
-<ol>
-    <li *ngFor='let book of books'>
+<!-- <ol class="list-group list-group-numbered">
+    <li class="list-group-item list-group-item-info" *ngFor='let book of books'>
         {{book.title}}, {{book.logo}}, {{book.category}}, {{book.authorUserName}}, {{book.authorName}},
         {{book.price}}, {{book.publisher}}, {{book.publishedDate}}, {{book.content}}, {{book.active}}
     </li>
-</ol>
+</ol>  -->
+
+<div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+     
+    <table class="table">
+        <thead>
+            <tr class="table-primary">
+                <th *ngFor="let column of displayedColumns">{{column}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-info" *ngFor="let book of books">
+                <td>{{book.id}}</td>
+                <td>{{book.title}}</td>
+                <td>{{book.logo}}</td>
+                <td>{{book.category}}</td>
+                <td>{{book.authorUserName}}</td>
+                <td>{{book.authorName}}</td>
+                <td>{{book.price}}</td>
+                <td>{{book.publisher}}</td>
+                <td>{{book.publishedDate}}</td>
+                <td>{{book.content}}</td>
+                <td>{{book.active}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</ng-template>
+<ng-template #elseBlock><label >{{message}}</label></ng-template>

@@ -38,9 +38,9 @@ public class BookServiceImpl implements BookService {
 		List<Book> bookList = bookRepository.findAll();
 		if(!bookList.isEmpty()) {
 			listOfBooks = bookList.stream().
-			filter(book -> book.getTitle().equals(title) || book.getCategory().toString().equals(category) || 
+			filter(book -> (book.getActive() == Boolean.TRUE) && (book.getTitle().equals(title) || book.getCategory().toString().equals(category) || 
 					book.getAuthorName().equalsIgnoreCase(author) || (book.getPrice() == price) 
-					|| book.getPublisher().equalsIgnoreCase(publisher)).collect(Collectors.toList());
+					|| book.getPublisher().equalsIgnoreCase(publisher))).collect(Collectors.toList());
 		}
 		return listOfBooks;
 	}
@@ -50,6 +50,25 @@ public class BookServiceImpl implements BookService {
 		Book book = null;
 		Optional<Book> bookOptional = bookRepository.findById(bookId);
 		if(bookOptional.isPresent()) {
+			book = bookOptional.get();
+		}
+		return book;
+	}
+
+	public List<Book> getAllAuthorBooks(String userName) {
+		List<Book> listOfBooks = new ArrayList<>();
+		List<Book> bookList = bookRepository.findAll();
+		if(!bookList.isEmpty()) {
+			listOfBooks = bookList.stream().
+			filter(book -> book.getAuthorUserName().equalsIgnoreCase(userName)).collect(Collectors.toList());
+		}
+		return listOfBooks;
+	}
+
+	public Book getAuthorBook(Integer bookId, String userName) {
+		Book book = null;
+		Optional<Book> bookOptional = bookRepository.findById(bookId);
+		if(bookOptional.isPresent() && bookOptional.get().getAuthorUserName().equalsIgnoreCase(userName)) {
 			book = bookOptional.get();
 		}
 		return book;
