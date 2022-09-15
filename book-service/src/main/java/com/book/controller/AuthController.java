@@ -30,7 +30,8 @@ import com.book.request.SignupRequest;
 import com.book.response.JwtResponse;
 import com.book.response.MessageResponse;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping("/userauth")
 public class AuthController {

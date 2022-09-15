@@ -6,11 +6,13 @@
     <a class="btn btn-outline-dark btn-sm" routerLink='/bookform'>Search Books</a>
     <a class="btn btn-outline-dark btn-sm " routerLink='/savebook'>CreateBooks</a>
     <a class="btn btn-outline-dark btn-sm " routerLink='/getallauthorbooks'>Get All Author Books</a>
+    <a class="btn btn-outline-dark btn-sm " routerLink="/register">Sign Up</a>
     <a class="btn btn-outline-dark btn-sm" routerLink='/' (click)="toggleLoggedIn()" >{{loggedIn ? 'Signout' : 'Signin'}}</a>
-    <!-- <div>
-        <button (click)="toggleLoggedIn()">Sign{{loggedIn ? 'out' : 'in'}}</button>
-        <div>Logged In: {{loggedIn}}</div>
-    </div> -->
 </nav>
 <router-outlet></router-outlet>
 </div>
+<div *ngIf="referenceName.isInitialHome==true"><img
+    id="profile-img"
+    src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=990&q=80"
+    class="center img-responsive"
+  /></div>

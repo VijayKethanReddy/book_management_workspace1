@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from '../app.component';
 import { BookService } from '../services/bookservice/book.service';
 
 @Component({
@@ -9,13 +10,15 @@ import { BookService } from '../services/bookservice/book.service';
 export class GetallauthorbooksComponent implements OnInit {
   books: any = [];
   message: any = "";
-  displayedColumns: string[] = ['id', 'title', 'logo', 'category', 'authorUserName', 'authorName', 'price', 'publisher', 'publishedDate', 'content', 'active'];
+  displayedColumns: string[] = ['No.', 'Title', 'Logo URL', 'Category', 'Author UserName', 'Author Name', 'Price', 'Publisher', 'PublishedDate', 'Content', 'Active'];
   column: any ="";
 
-  constructor(public bookService: BookService) { }
+  constructor(public bookService: BookService) { 
+    AppComponent.isInitialHome=false;
+  }
 
   ngOnInit(): void {
-      this.getAllAuthorBooks();
+    this.getAllAuthorBooks();
   }
 
   getAllAuthorBooks(){

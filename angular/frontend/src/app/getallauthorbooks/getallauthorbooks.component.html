@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <tr class="table-info" *ngFor="let book of books">
-                <td>{{book.id}}</td>
+                <td>{{books.indexOf(book)+1}}</td>
                 <td>{{book.title}}</td>
                 <td>{{book.logo}}</td>
                 <td>{{book.category}}</td>

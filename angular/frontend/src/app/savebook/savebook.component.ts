@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Book, { BookCategory } from 'src/app/entity/Book';
 import { BookService } from 'src/app/services/bookservice/book.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-savebook',
@@ -12,10 +13,12 @@ export class SavebookComponent implements OnInit {
   categoryList: BookCategory[] = [];
   bookCategory = BookCategory;
   message: any = "";
+  isSuccessful = false;
 
   constructor(public bookService: BookService) { 
     this.categoryList.push(this.bookCategory.ACTION);
     this.categoryList.push(this.bookCategory.ADVENTURE);
+    AppComponent.isInitialHome=false;
   }
 
   ngOnInit(): void {
@@ -34,7 +37,6 @@ export class SavebookComponent implements OnInit {
       }
     },
     (error)=>{
-      //alert('Something went wrong'+ error);
       console.log("error :",error);
       this.message = error;
       this.message = "Error occurred while saving the book. Please verify the details and save the book";

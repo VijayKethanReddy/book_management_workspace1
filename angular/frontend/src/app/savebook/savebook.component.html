@@ -1,11 +1,25 @@
 <p>Create Books</p>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Title</label>
-    <input [(ngModel)] = 'book.title'/>
+    <input [(ngModel)] = 'book.title' required
+    minlength="3"
+    maxlength="50" #title="ngModel"/>
+    <div class="alert-danger" *ngIf="title.errors">
+        <div *ngIf="title.errors.required">title is required</div>
+        <div *ngIf="title.errors.minlength">
+            title must be at least 3 characters
+        </div>
+        <div *ngIf="title.errors.maxlength">
+            title must be at most 50 characters
+        </div>
+    </div>
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Image</label>
-    <input [(ngModel)] = 'book.logo'/>
+    <input [(ngModel)] = 'book.logo' required #logo="ngModel"/>
+    <div class="alert-danger" *ngIf="logo.errors">
+        <div *ngIf="logo.errors.required">logo is required</div>
+    </div>
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Category</label>
@@ -15,24 +29,46 @@
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Price</label>
-    <input [(ngModel)] = 'book.price' type='number'/>
+    <input [(ngModel)] = 'book.price' type='number' min="1" required #price="ngModel"/>
+    <div class="alert-danger" *ngIf="price.errors">
+        <div *ngIf="price.errors.required">price is required</div>
+        <div *ngIf="price.errors.min">
+            price must be at least 1
+        </div>
+    </div>
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Publisher</label>
-    <input [(ngModel)] = 'book.publisher'/>
+    <input [(ngModel)] = 'book.publisher' 
+    required minlength="3" maxlength="50" #publisher="ngModel"/>
+    <div class="alert-danger" *ngIf="publisher.errors">
+        <div *ngIf="publisher.errors.required">publisher is required</div>
+        <div *ngIf="publisher.errors.minlength">
+            publisher must be at least 3 characters
+        </div>
+        <div *ngIf="publisher.errors.maxlength">
+            publisher must be at most 50 characters
+        </div>
+    </div>
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Published Date</label>
-    <input type="date" [(ngModel)] = 'book.publishedDate'/>
+    <input type="date" [(ngModel)] = 'book.publishedDate' required #publishedDate="ngModel"/>
+    <div class="alert-danger" *ngIf="publishedDate.errors">
+        <div *ngIf="publishedDate.errors.required">publishedDate is required</div>
+    </div>
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Content</label>
-    <input [(ngModel)] = 'book.content'/>
+    <input [(ngModel)] = 'book.content' required #content="ngModel"/>
+    <div class="alert-danger" *ngIf="content.errors">
+        <div *ngIf="content.errors.required">content is required</div>
+    </div>
 </div>
 <div class="form-row">
     <label class="col-sm-2 col-form-label">Active</label>
-    <input type="radio" value=true [(ngModel)]='book.active'>True
-    <input type="radio" value=false [(ngModel)]='book.active'>False
+    <input type="radio" [value]=true [(ngModel)]='book.active'>True
+    <input type="radio" [value]=false [(ngModel)]='book.active'>False
 </div>
 <button class="btn btn-primary" (click)='save()'>Save</button>
 <br>

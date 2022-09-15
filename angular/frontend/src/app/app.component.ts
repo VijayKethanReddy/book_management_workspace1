@@ -8,21 +8,25 @@ import { AuthGuardService } from './services/auth-guard/auth-guard.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  static isInitialHome =true;
+  referenceName = AppComponent;
   title = 'frontend';
   get loggedIn () {
     return this.authGuardService.isLoggedIn;
   };
 
-  constructor(private authGuardService: AuthGuardService, private router: Router) { }
+  constructor(private authGuardService: AuthGuardService, private router: Router) { 
+    AppComponent.isInitialHome=true;
+  }
 
   toggleLoggedIn() {
     if (this.authGuardService.isLoggedIn==true) 
     {
-        alert("you are signing out");
+        console.log("you are signing out");
     } 
     else
     {
-      alert("you are signing in");
+      console.log("you are signing in");
     }
     this.authGuardService.isLoggedIn = !this.authGuardService.isLoggedIn;
     this.router.navigate(['/bookform']);

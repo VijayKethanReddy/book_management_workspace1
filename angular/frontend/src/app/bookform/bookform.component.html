@@ -33,16 +33,16 @@
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
      
-    <table class="table">
+    <table class="table table-hover">
         <thead>
-            <tr class="table-primary">
+            <tr class="table-primary text-md-start">
                 <th *ngFor="let column of displayedColumns">{{column}}</th>
             </tr>
         </thead>
         <tbody>
-            <tr class="table-info" *ngFor="let book of books">
-                <td>{{book.id}}</td>
-                <td>{{book.title}}</td>
+            <tr class="table-info text-dark" *ngFor="let book of books">
+                <td>{{books.indexOf(book)+1}}</td>
+                <td >{{book.title}}</td>
                 <td>{{book.logo}}</td>
                 <td>{{book.category}}</td>
                 <td>{{book.authorUserName}}</td>
