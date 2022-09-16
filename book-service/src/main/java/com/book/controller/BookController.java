@@ -78,12 +78,15 @@ public class BookController extends BaseController {
 	//@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> saveBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
 		ResponseEntity<Integer> response;
+		int bookId = 0;
 		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
 		if(user!=null) {
 			book.setAuthorName(user.getName());
 			book.setAuthorUserName(user.getUserName());
-			bookService.saveBook(book);
-			int bookId = book.getId();
+			book = bookService.saveBook(book);
+			if(book != null) {
+				bookId = book.getId();
+			}
 			response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
 			bookAuthor.setBook(book);
 			bookAuthor.setEmailId(user.getEmailId());

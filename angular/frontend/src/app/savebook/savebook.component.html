@@ -1,75 +1,94 @@
 <p>Create Books</p>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Title</label>
-    <input [(ngModel)] = 'book.title' required
-    minlength="3"
-    maxlength="50" #title="ngModel"/>
-    <div class="alert-danger" *ngIf="title.errors">
-        <div *ngIf="title.errors.required">title is required</div>
-        <div *ngIf="title.errors.minlength">
-            title must be at least 3 characters
-        </div>
-        <div *ngIf="title.errors.maxlength">
-            title must be at most 50 characters
-        </div>
-    </div>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Image</label>
-    <input [(ngModel)] = 'book.logo' required #logo="ngModel"/>
-    <div class="alert-danger" *ngIf="logo.errors">
-        <div *ngIf="logo.errors.required">logo is required</div>
-    </div>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Category</label>
-    <select [(ngModel)]="book.category">
-        <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
-    </select>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Price</label>
-    <input [(ngModel)] = 'book.price' type='number' min="1" required #price="ngModel"/>
-    <div class="alert-danger" *ngIf="price.errors">
-        <div *ngIf="price.errors.required">price is required</div>
-        <div *ngIf="price.errors.min">
-            price must be at least 1
+<form name="form" (ngSubmit)="f.form.valid && save()" #f="ngForm" novalidate>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Title</label>
+        <input pattern="^(?!\s*$)[\s\S]+$" name="title" [(ngModel)] = 'form.title' required
+        minlength="3"
+        maxlength="50" #title="ngModel"/>
+        <div class="alert-danger validationMessage" *ngIf="title.errors && f.submitted">
+            <div *ngIf="title.errors.required">title is required</div>
+            <div *ngIf="title.errors.minlength">
+                title must be at least 3 characters
+            </div>
+            <div *ngIf="title.errors.maxlength">
+                title must be at most 50 characters
+            </div>
+            <div *ngIf="title.errors.pattern">
+                title must not have empty spaces
+            </div>
         </div>
     </div>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Publisher</label>
-    <input [(ngModel)] = 'book.publisher' 
-    required minlength="3" maxlength="50" #publisher="ngModel"/>
-    <div class="alert-danger" *ngIf="publisher.errors">
-        <div *ngIf="publisher.errors.required">publisher is required</div>
-        <div *ngIf="publisher.errors.minlength">
-            publisher must be at least 3 characters
-        </div>
-        <div *ngIf="publisher.errors.maxlength">
-            publisher must be at most 50 characters
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Image</label>
+        <input pattern="^(?!\s*$)[\s\S]+$" name="logo" [(ngModel)] = 'form.logo' required #logo="ngModel"/>
+        <div class="alert-danger validationMessage" *ngIf="logo.errors && f.submitted">
+            <div *ngIf="logo.errors.required">logo is required</div>
+            <div *ngIf="logo.errors.pattern">
+                logo must not have empty spaces
+            </div>
         </div>
     </div>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Published Date</label>
-    <input type="date" [(ngModel)] = 'book.publishedDate' required #publishedDate="ngModel"/>
-    <div class="alert-danger" *ngIf="publishedDate.errors">
-        <div *ngIf="publishedDate.errors.required">publishedDate is required</div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Category</label>
+        <select name="category" [(ngModel)]="form.category">
+            <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
+        </select>
     </div>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Content</label>
-    <input [(ngModel)] = 'book.content' required #content="ngModel"/>
-    <div class="alert-danger" *ngIf="content.errors">
-        <div *ngIf="content.errors.required">content is required</div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Price</label>
+        <input name="price" [(ngModel)] = 'form.price' type='number' min="1" required #price="ngModel"/>
+        <div class="alert-danger validationMessage" *ngIf="price.errors && f.submitted">
+            <div *ngIf="price.errors.required">price is required</div>
+            <div *ngIf="price.errors.min">
+                price must be at least 1
+            </div>
+        </div>
     </div>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Active</label>
-    <input type="radio" [value]=true [(ngModel)]='book.active'>True
-    <input type="radio" [value]=false [(ngModel)]='book.active'>False
-</div>
-<button class="btn btn-primary" (click)='save()'>Save</button>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Publisher</label>
+        <input pattern="^(?!\s*$)[\s\S]+$" name="publisher" [(ngModel)] = 'form.publisher' 
+        required minlength="3" maxlength="50" #publisher="ngModel"/>
+        <div class="alert-danger validationMessage" *ngIf="publisher.errors && f.submitted">
+            <div *ngIf="publisher.errors.required">publisher is required</div>
+            <div *ngIf="publisher.errors.minlength">
+                publisher must be at least 3 characters
+            </div>
+            <div *ngIf="publisher.errors.maxlength">
+                publisher must be at most 50 characters
+            </div>
+            <div *ngIf="publisher.errors.pattern">
+                publisher must not have empty spaces
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Published Date</label>
+        <input type="date" name="publishedDate" [(ngModel)] = 'form.publishedDate' required #publishedDate="ngModel"/>
+        <div class="alert-danger validationMessage" *ngIf="publishedDate.errors && f.submitted">
+            <div *ngIf="publishedDate.errors.required">publishedDate is required</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Content</label>
+        <input pattern="^(?!\s*$)[\s\S]+$" name="content" [(ngModel)] = 'form.content' required #content="ngModel"/>
+        <div class="alert-danger validationMessage" *ngIf="content.errors && f.submitted">
+            <div *ngIf="content.errors.required">content is required</div>
+            <div *ngIf="content.errors.pattern">
+                content must not have empty spaces
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Active</label>
+        <input name="active" type="radio" [value]=true [(ngModel)]='form.active'>True
+        <input name="active" type="radio" [value]=false [(ngModel)]='form.active'>False
+    </div>
+    <button class="btn btn-primary">Save</button>
+</form>
 <br>
-<label>{{message}}</label>
+<div class="successMessage" *ngIf="errorMessage==''">
+    <label>{{successMessage}}</label>
+</div>
+<div class="validationMessage" *ngIf="errorMessage!=''">
+    <label>{{errorMessage}}</label>
+</div>

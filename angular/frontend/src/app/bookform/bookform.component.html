@@ -22,7 +22,7 @@
     <input [(ngModel)] = 'publisher'/>
 </div>
 <button class="btn btn-primary" (click)='searchBooks()'>Search</button>
-<p>Search Result</p>
+<p>Search Result {{books.length}} records found</p>
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
      

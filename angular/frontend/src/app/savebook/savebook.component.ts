@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import Book, { BookCategory } from 'src/app/entity/Book';
 import { BookService } from 'src/app/services/bookservice/book.service';
@@ -10,9 +11,23 @@ import { AppComponent } from '../app.component';
 })
 export class SavebookComponent implements OnInit {
   book:Book= new Book('book1_url', 'Book1', BookCategory.ADVENTURE, 1, '', '', 'ABC Publisher', new Date(), 'This is book1 content', true);
+  form: any = {
+    title: this.book.title,
+    logo: this.book.logo,
+    category: this.book.category,
+    price: this.book.price,
+    authorUserName: this.book.authorUserName,
+    authorName: this.book.authorName,
+    publisher: this.book.publisher,
+    publishedDate: null,
+    //publishedDate: this.book.publishedDate,
+    content: this.book.content,
+    active: this.book.active
+  };
   categoryList: BookCategory[] = [];
   bookCategory = BookCategory;
-  message: any = "";
+  successMessage: any = "";
+  errorMessage: any = "";
   isSuccessful = false;
 
   constructor(public bookService: BookService) { 
@@ -28,22 +43,31 @@ export class SavebookComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  save(){
+  save(): void{
     console.log("clicked");
-    const observable = this.bookService.saveBook(this.book);
+    const { title, logo, category, price, authorUserName, authorName, publisher, publishedDate, content, active } = this.form;
+    const observable = this.bookService.saveBook(title, logo, category, price, authorUserName, authorName, publisher, publishedDate, content, active);
     observable.subscribe((response)=>{
       console.log(response);
       if(Number.isFinite(Number(response))){
-        this.message = "Book "+this.book.title+" is saved successfully";
+        if(Number(response) == 0){
+          this.errorMessage = "Book title "+title+" is already used. Please use different title to save the book";
+          this.successMessage = "";
+        }
+        else{
+          this.successMessage = "Book "+title+" is saved successfully";
+          this.errorMessage = "";
+        }
       }
       else{
-        this.message = JSON.stringify(response);
+        this.errorMessage = JSON.stringify(response);
+        this.successMessage = "";
       }
     },
     (error)=>{
       console.log("error :",error);
-      this.message = error;
-      this.message = "Error occurred while saving the book. Please verify the details and save the book";
+      this.errorMessage = "Error occurred while saving the book. Please verify the details and save the book";
+      this.successMessage = "";
     })
   }
   

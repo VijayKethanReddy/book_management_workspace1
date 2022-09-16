@@ -5,11 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.book.BookRepository;
 import com.book.entity.Book;
 import com.book.service.BookService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -21,6 +27,7 @@ import com.book.service.BookService;
  *
  */
 
+@Slf4j
 @Service
 public class BookServiceImpl implements BookService {
 	
@@ -29,18 +36,70 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public Book saveBook(Book book) {
-		return bookRepository.save(book);
+		Book book1 = null;
+		try {
+			return bookRepository.save(book);
+		}
+		catch(DataIntegrityViolationException e1) {
+			return book1;
+		}
 	}
 	
 	@Override
 	public List<Book> searchBooks(String title, String category, String author, BigDecimal price, String publisher) {
 		List<Book> listOfBooks = new ArrayList<>();
+		Boolean flag =false;
+		
 		List<Book> bookList = bookRepository.findAll();
 		if(!bookList.isEmpty()) {
-			listOfBooks = bookList.stream().
-			filter(book -> (book.getActive() == Boolean.TRUE) && (book.getTitle().equals(title) || book.getCategory().toString().equals(category) || 
-					book.getAuthorName().equalsIgnoreCase(author) || (book.getPrice() == price) 
-					|| book.getPublisher().equalsIgnoreCase(publisher))).collect(Collectors.toList());
+			if(!StringUtils.isBlank(title) && !StringUtils.isBlank(author) && (price.compareTo(BigDecimal.ZERO) >=0) && !StringUtils.isBlank(publisher)) {
+				listOfBooks = bookList.stream().
+				filter(book -> ((book.getActive() == Boolean.TRUE) && (book.getTitle().equalsIgnoreCase(title) && book.getCategory().toString().equals(category) && 
+						book.getAuthorName().equalsIgnoreCase(author) && (book.getPrice().compareTo(price) == 0) 
+						&& book.getPublisher().equalsIgnoreCase(publisher)))).collect(Collectors.toList());
+			}
+			else {
+				if(!StringUtils.isBlank(title)) {
+					flag =true;
+					listOfBooks = bookList.stream().
+							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getTitle().equals(title))).collect(Collectors.toList());
+				}
+				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
+					listOfBooks = bookList;
+				}
+				if(!StringUtils.isBlank(author)) {
+					flag =true;
+					listOfBooks = listOfBooks.stream().
+							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getAuthorName().equalsIgnoreCase(author))).collect(Collectors.toList());
+				}
+				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
+					listOfBooks = bookList;
+				}
+				if(!StringUtils.isBlank(category)) {
+					flag =true;
+					listOfBooks = listOfBooks.stream().
+							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getCategory().toString().equals(category))).collect(Collectors.toList());
+				}
+				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
+					listOfBooks = bookList;
+				}
+				if(price.compareTo(BigDecimal.ZERO) >=0) {
+					flag =true;
+					listOfBooks = listOfBooks.stream().
+							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getPrice().compareTo(price) == 0)).collect(Collectors.toList());
+				}
+				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
+					listOfBooks = bookList;
+				}
+				if(!StringUtils.isBlank(publisher)) {
+					flag =true;
+					listOfBooks = listOfBooks.stream().
+							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getPublisher().equalsIgnoreCase(publisher))).collect(Collectors.toList());
+				}
+				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
+					listOfBooks = new ArrayList<>();
+				}
+			}
 		}
 		return listOfBooks;
 	}
