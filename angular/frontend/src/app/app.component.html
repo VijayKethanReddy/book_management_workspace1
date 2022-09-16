@@ -5,7 +5,7 @@
         <nav class="breadcrumb bread-primary ">
             <a class="btn btn-outline-dark btn-block" routerLink='/'>Home</a>
             <a class="btn btn-outline-dark btn-block" routerLink='/bookform'>Search Books</a>
-            <a class="btn btn-outline-dark btn-block " routerLink='/savebook'>CreateBooks</a>
+            <a *ngIf="loggedIn==true" class="btn btn-outline-dark btn-block " routerLink='/savebook'>CreateBooks</a>
             <a class="btn btn-outline-dark btn-block " routerLink='/getallauthorbooks'>Get All Author Books</a>
             <a class="btn btn-outline-dark btn-block " routerLink="/register">Sign Up</a>
             <a class="btn btn-outline-dark btn-block" routerLink='/' (click)="toggleLoggedIn()" >{{loggedIn ? 'Signout' : 'Signin'}}</a>

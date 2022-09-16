@@ -8,5 +8,5 @@ package com.book.entity;
  */
 
 public enum BookCategory {
-	ADVENTURE, ACTION
+	ADVENTURE, ACTION, EPIC, FICTION, COMEDY, FANTASY
 }

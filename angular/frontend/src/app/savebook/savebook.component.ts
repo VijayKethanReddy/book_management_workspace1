@@ -18,6 +18,10 @@ export class SavebookComponent implements OnInit {
   constructor(public bookService: BookService) { 
     this.categoryList.push(this.bookCategory.ACTION);
     this.categoryList.push(this.bookCategory.ADVENTURE);
+    this.categoryList.push(this.bookCategory.COMEDY);
+    this.categoryList.push(this.bookCategory.EPIC);
+    this.categoryList.push(this.bookCategory.FANTASY);
+    this.categoryList.push(this.bookCategory.FICTION);
     AppComponent.isInitialHome=false;
   }
 

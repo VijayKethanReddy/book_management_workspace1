@@ -1,6 +1,10 @@
 export enum BookCategory {
     ADVENTURE = 'ADVENTURE',
     ACTION = 'ACTION',
+    EPIC = 'EPIC',
+    FICTION = 'FICTION',
+    COMEDY = 'COMEDY',
+    FANTASY = 'FANTASY'
 }
 
 export default class Book{
