@@ -1,7 +1,7 @@
-<p>All Author Books</p>
+<p>All Books of Author {{books[0].authorName}}</p>
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr class="table-primary">
                 <th *ngFor="let column of displayedColumns">{{column}}</th>

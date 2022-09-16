@@ -6,14 +6,26 @@ p{
 }
 a{
      padding-left:1em;
-     border: 2px;
+     border: 0px;
+     color: #c1682d;
+    font-size: large;
 }
 nav{
     float:right;
 }
 img{
-    width: 60%;
+    width: 55%;
+    opacity: 0.8;
     display: block;
+    margin-top: auto;
     margin-left: auto;
     margin-right: auto;
+}
+  
+.titlebar{
+    background: rgb(233, 219, 225);
+    border: 0px;
+    display: block;
+    height: 38x;
+    margin: 10px 0px 0px 0px;
 }

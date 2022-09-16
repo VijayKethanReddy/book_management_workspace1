@@ -23,13 +23,6 @@
 </div>
 <button class="btn btn-primary" (click)='searchBooks()'>Search</button>
 <p>Search Result</p>
-<!-- <ol class="list-group list-group-numbered">
-    <li class="list-group-item list-group-item-info" *ngFor='let book of books'>
-        {{book.title}}, {{book.logo}}, {{book.category}}, {{book.authorUserName}}, {{book.authorName}},
-        {{book.price}}, {{book.publisher}}, {{book.publishedDate}}, {{book.content}}, {{book.active}}
-    </li>
-</ol>  -->
-
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
      
