@@ -1,6 +1,10 @@
 <div class="form-horizontal">
-    <p class="form-center">Create Books</p>
-    <form name="form" (ngSubmit)="f.form.valid && save()" #f="ngForm" novalidate>
+    <p class="form-center">Edit Books</p>
+    <form name="form" (ngSubmit)="f.form.valid && edit()" #f="ngForm" novalidate>
+        <div class="form-row">
+            <label class="col-sm-2 col-form-label">Id</label>
+            <input name="id" [(ngModel)] = 'form.id' type='number' readonly/>
+        </div>
         <div class="form-row">
             <label class="col-sm-2 col-form-label">Title</label>
             <input pattern="^(?!\s*$)[\s\S]+$" name="title" [(ngModel)] = 'form.title' required
@@ -85,7 +89,7 @@
             <input name="active" type="radio" [value]=false [(ngModel)]='form.active'>False
         </div>
         <div class="form-center">
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-primary">Update</button>
         </div>
     </form>
     <br>

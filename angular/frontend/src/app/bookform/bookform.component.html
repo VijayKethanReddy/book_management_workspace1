@@ -1,28 +1,34 @@
-<p>Search Books</p>
-<div class="form-row">
-        <label class="col-sm-2 col-form-label">Title</label>
-        <input [(ngModel)] = 'title'/>
+<div class="form-horizontal">
+    <p class="form-center">Search Books</p>
+    <div class="form-row">
+            <label class="col-sm-2 col-form-label">Title</label>
+            <input [(ngModel)] = 'title'/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Category</label>
+        <select [(ngModel)]="category">
+            <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Author</label>
+        <input [(ngModel)] = 'author'/>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 col-form-label">Price</label>
+        <input [(ngModel)] = 'price' type='number'/>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 col-form-label">Publisher</label>
+        <input [(ngModel)] = 'publisher'/>
+    </div>
+    <div class="form-center">
+        <button class="btn btn-primary" (click)='searchBooks()'>Search</button>
+    </div>
+    <div *ngIf="message == ''">
+        <p class="successMessage">Search Result {{books.length}} records found</p>
+    </div>
 </div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Category</label>
-    <select [(ngModel)]="category">
-        <option *ngFor="let item of categoryList" [ngValue]="item">{{item}}</option>
-    </select>
-</div>
-<div class="form-row">
-    <label class="col-sm-2 col-form-label">Author</label>
-    <input [(ngModel)] = 'author'/>
-</div>
-<div class="form-group">
-    <label class="col-sm-2 col-form-label">Price</label>
-    <input [(ngModel)] = 'price' type='number'/>
-</div>
-<div class="form-group">
-    <label class="col-sm-2 col-form-label">Publisher</label>
-    <input [(ngModel)] = 'publisher'/>
-</div>
-<button class="btn btn-primary" (click)='searchBooks()'>Search</button>
-<p>Search Result {{books.length}} records found</p>
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
      
@@ -33,7 +39,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="table-info text-dark" *ngFor="let book of books">
+            <tr class="table-info text-dark" *ngFor="let book of books" (click)="tableRowClicked(book)">
                 <td>{{books.indexOf(book)+1}}</td>
                 <td >{{book.title}}</td>
                 <td>{{book.logo}}</td>
@@ -50,4 +56,4 @@
     </table>
 
 </ng-template>
-<ng-template #elseBlock><label >{{message}}</label></ng-template>
+<ng-template #elseBlock><label class="form-horizontal validationMessage">{{message}}</label></ng-template>

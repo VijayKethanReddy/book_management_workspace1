@@ -1,4 +1,6 @@
-<p>All Books of Author {{books[0].authorName}}</p>
+<div *ngIf="authorName!= ''">
+    <p>All Books of Author {{authorName}}</p>
+</div>
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
     <table class="table table-hover">
@@ -8,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="table-info" *ngFor="let book of books">
+            <tr class="table-info" *ngFor="let book of books" (click)="tableRowClicked(book)">
                 <td>{{books.indexOf(book)+1}}</td>
                 <td>{{book.title}}</td>
                 <td>{{book.logo}}</td>

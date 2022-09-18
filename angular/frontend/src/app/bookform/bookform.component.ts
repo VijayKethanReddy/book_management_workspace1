@@ -3,6 +3,7 @@ import { BookService } from '../services/bookservice/book.service';
 import Book, { BookCategory } from '../entity/Book';
 import { GetallauthorbooksComponent } from '../getallauthorbooks/getallauthorbooks.component';
 import { AppComponent } from '../app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bookform',
@@ -22,7 +23,7 @@ export class BookformComponent implements OnInit {
   displayedColumns: string[] = ['No.', 'Title', 'Logo URL', 'Category', 'Author UserName', 'Author Name', 'Price', 'Publisher', 'PublishedDate', 'Content', 'Active'];
   column: any ="";
   
-  constructor(public bookService: BookService) {
+  constructor(public bookService: BookService, private router: Router) {
     this.categoryList.push(this.bookCategory.ACTION);
     this.categoryList.push(this.bookCategory.ADVENTURE);
     this.categoryList.push(this.bookCategory.COMEDY);
@@ -37,17 +38,31 @@ export class BookformComponent implements OnInit {
 
   searchBooks(){
     console.log("clicked");
+    if(this.price == null || this.price == undefined){
+      this.price = 0;
+    }
     const observable = this.bookService.searchBooks(this.title, this.category, this.author, this.price, this.publisher);
     observable.subscribe((books)=>{
       console.log(books);
       this.books = books;
       this.books = books;
       this.message = "";
+      if(this.books.length == 0){
+        this.message = "No search results found. Please verify the details and search";
+        this.books = [];
+      }
     },
     (error)=>{
       this.message = "No search results found. Please verify the details and search";
       this.books = [];
     })
+  }
+
+  tableRowClicked(book: any){
+    console.log("clicked");
+    console.log(book);
+    this.bookService.book1 = book; 
+    this.router.navigate(['/buybook']);
   }
 
 }

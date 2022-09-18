@@ -7,16 +7,28 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BookformComponent } from './bookform/bookform.component';
 import { SavebookComponent } from './savebook/savebook.component';
-import { AuthGuardService } from './services/auth-guard/auth-guard.service';
 import { RouterModule, Routes } from '@angular/router';
 import { GetallauthorbooksComponent } from './getallauthorbooks/getallauthorbooks.component';
 import { RegisterComponent } from './register/register.component';
+import { EditbookComponent } from './editbook/editbook.component';
+import { BuybookComponent } from './buybook/buybook.component';
+import { PurchasedbooksComponent } from './purchasedbooks/purchasedbooks.component';
+import { ReadbookComponent } from './readbook/readbook.component';
+import { LoginComponent } from './login/login.component';
+import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes:Routes = [
   {path: 'bookform', component: BookformComponent},
-  {path: 'savebook', component: SavebookComponent, canActivate: [AuthGuardService]},
+  {path: 'savebook', component: SavebookComponent},
   {path: 'getallauthorbooks', component: GetallauthorbooksComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'editbook', component: EditbookComponent},
+  {path: 'buybook', component: BuybookComponent},
+  {path: 'purchasedbooks', component: PurchasedbooksComponent},
+  {path: 'readbook', component: ReadbookComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'profile', component: ProfileComponent}
 ]
 @NgModule({
   declarations: [
@@ -24,13 +36,19 @@ const routes:Routes = [
     BookformComponent,
     SavebookComponent,
     GetallauthorbooksComponent,
-    RegisterComponent
+    RegisterComponent,
+    EditbookComponent,
+    BuybookComponent,
+    PurchasedbooksComponent,
+    ReadbookComponent,
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule, FormsModule, HttpClientModule, RouterModule.forRoot(routes)
   ],
-  providers: [AuthGuardService],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

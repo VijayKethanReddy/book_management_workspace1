@@ -18,7 +18,7 @@ import com.book.entity.Payment;
 
 public interface BookRepository extends JpaRepository<Book, Integer>{
 
-	Optional<List<Book>> findByTitle(String title);
+	Optional<Book> findByTitle(String title);
 	
 	Optional<List<Book>> findByCategory(BookCategory category);
 	

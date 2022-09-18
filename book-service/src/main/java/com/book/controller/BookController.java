@@ -64,6 +64,7 @@ public class BookController extends BaseController {
 	PaymentService paymentService;
 
 	@GetMapping("/books/search")
+	@PreAuthorize("hasRole('READER')")
 	//@PreAuthorize("hasRole('READER') or hasRole('AUTHOR')")
 	public ResponseEntity<List<Book>> searchBooks(@RequestParam String title, @RequestParam String category, 
 			@RequestParam String author, @RequestParam BigDecimal price, 
@@ -75,32 +76,35 @@ public class BookController extends BaseController {
 	}
 	
 	@PostMapping("/author/{authorId}/books")
-	//@PreAuthorize("hasRole('AUTHOR')")
+	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> saveBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
 		ResponseEntity<Integer> response;
-		int bookId = 0;
-		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
-		if(user!=null) {
-			book.setAuthorName(user.getName());
-			book.setAuthorUserName(user.getUserName());
-			book = bookService.saveBook(book);
-			if(book != null) {
+		Book book1 = bookService.getBook(book.getTitle());
+		if(book1 == null) {
+			int bookId = 0;
+			User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
+			if(user!=null) {
+				book.setAuthorName(user.getName());
+				book.setAuthorUserName(user.getUserName());
+				book = bookService.saveBook(book);
 				bookId = book.getId();
+				response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
+				bookAuthor.setBook(book);
+				bookAuthor.setEmailId(user.getEmailId());
+				//ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
+				//log.debug(responseFromEmailService.getBody());
 			}
-			response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
-			bookAuthor.setBook(book);
-			bookAuthor.setEmailId(user.getEmailId());
-			//ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
-			//log.debug(responseFromEmailService.getBody());
-		}
-		else {
-			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			else {
+				response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		}else {
+			response = new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		return response;
 	}
 	
 	@GetMapping("/author/{authorId}/allbooks")
-	//@PreAuthorize("hasRole('AUTHOR')")
+	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<List<Book>> getAllAuthorBooks(@PathVariable("authorId") int authorId) {
 		log.debug("Inside getBook method");
 		ResponseEntity<List<Book>> response;
@@ -116,7 +120,7 @@ public class BookController extends BaseController {
 	}
 	
 	@GetMapping("/author/{authorId}/book/{bookId}")
-	//@PreAuthorize("hasRole('AUTHOR')")
+	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Book> getAuthorBook(@PathVariable("authorId") int authorId, @PathVariable("bookId") Integer bookId) {
 		log.debug("Inside getBook method");
 		ResponseEntity<Book> response;
@@ -219,6 +223,31 @@ public class BookController extends BaseController {
 		}
 		else {
 			response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return response;
+	}
+	
+	@PostMapping("/author/{authorId}/books/editbook")
+	@PreAuthorize("hasRole('AUTHOR')")
+	public ResponseEntity<Integer> editBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
+		ResponseEntity<Integer> response;
+		int bookId = 0;
+		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
+		if(user!=null) {
+			book.setAuthorName(user.getName());
+			book.setAuthorUserName(user.getUserName());
+			book = bookService.saveBook(book);
+			if(book != null) {
+				bookId = book.getId();
+			}
+			response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
+			bookAuthor.setBook(book);
+			bookAuthor.setEmailId(user.getEmailId());
+			//ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
+			//log.debug(responseFromEmailService.getBody());
+		}
+		else {
+			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return response;
 	}

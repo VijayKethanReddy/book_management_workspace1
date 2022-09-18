@@ -1,0 +1,57 @@
+<div class="form-horizontal">
+<p class="form-center">Buy Books</p>
+<form name="form" (ngSubmit)="f.form.valid && buy()" #f="ngForm" novalidate>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Id</label>
+        <input name="id" [(ngModel)] = 'form.id' type='number' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Title</label>
+        <input name="title" [(ngModel)] = 'form.title' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Image</label>
+        <input name="logo" [(ngModel)] = 'form.logo' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Category</label>
+        <input name="category" [(ngModel)] = 'form.category' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Price</label>
+        <input name="price" [(ngModel)] = 'form.price' type='number' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Publisher</label>
+        <input name="publisher" [(ngModel)] = 'form.publisher' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Published Date</label>
+        <input type="date" name="publishedDate" [(ngModel)] = 'form.publishedDate' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Content</label>
+        <input name="content" [(ngModel)] = 'form.content' readonly/>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-2 col-form-label">Active</label>
+        <input name="active" [(ngModel)] = 'form.active' readonly/>
+    </div>
+        <div class="form-center"> 
+            <div *ngIf="successMessage!=''">
+                <button class="btn btn-primary" [disabled]="true">Buy</button>
+            </div> 
+            <div *ngIf="successMessage ==''">
+                <button class="btn btn-primary">Buy</button>
+            </div>
+            
+        </div>
+</form>
+<br>
+<div class="successMessage" *ngIf="errorMessage==''">
+    <label>{{successMessage}}</label>
+</div>
+<div class="validationMessage" *ngIf="errorMessage!=''">
+    <label>{{errorMessage}}</label>
+</div>
+</div>

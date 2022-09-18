@@ -27,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 
-@Slf4j
 @Service
 public class BookServiceImpl implements BookService {
 	
@@ -36,13 +35,7 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public Book saveBook(Book book) {
-		Book book1 = null;
-		try {
-			return bookRepository.save(book);
-		}
-		catch(DataIntegrityViolationException e1) {
-			return book1;
-		}
+		return bookRepository.save(book);
 	}
 	
 	@Override
@@ -52,51 +45,40 @@ public class BookServiceImpl implements BookService {
 		
 		List<Book> bookList = bookRepository.findAll();
 		if(!bookList.isEmpty()) {
-			if(!StringUtils.isBlank(title) && !StringUtils.isBlank(author) && (price.compareTo(BigDecimal.ZERO) >=0) && !StringUtils.isBlank(publisher)) {
+			if(!StringUtils.isBlank(title) && !StringUtils.isBlank(author) && (price.compareTo(BigDecimal.ZERO)>0) && !StringUtils.isBlank(publisher)) {
 				listOfBooks = bookList.stream().
 				filter(book -> ((book.getActive() == Boolean.TRUE) && (book.getTitle().equalsIgnoreCase(title) && book.getCategory().toString().equals(category) && 
 						book.getAuthorName().equalsIgnoreCase(author) && (book.getPrice().compareTo(price) == 0) 
 						&& book.getPublisher().equalsIgnoreCase(publisher)))).collect(Collectors.toList());
 			}
 			else {
+				listOfBooks = new ArrayList<>(bookList);
 				if(!StringUtils.isBlank(title)) {
 					flag =true;
 					listOfBooks = bookList.stream().
-							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getTitle().equals(title))).collect(Collectors.toList());
-				}
-				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
-					listOfBooks = bookList;
+							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getTitle().equalsIgnoreCase(title))).collect(Collectors.toList());
 				}
 				if(!StringUtils.isBlank(author)) {
 					flag =true;
 					listOfBooks = listOfBooks.stream().
 							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getAuthorName().equalsIgnoreCase(author))).collect(Collectors.toList());
 				}
-				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
-					listOfBooks = bookList;
-				}
 				if(!StringUtils.isBlank(category)) {
 					flag =true;
 					listOfBooks = listOfBooks.stream().
 							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getCategory().toString().equals(category))).collect(Collectors.toList());
 				}
-				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
-					listOfBooks = bookList;
-				}
-				if(price.compareTo(BigDecimal.ZERO) >=0) {
+				if(price.compareTo(BigDecimal.ZERO)>0) {
 					flag =true;
 					listOfBooks = listOfBooks.stream().
 							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getPrice().compareTo(price) == 0)).collect(Collectors.toList());
-				}
-				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
-					listOfBooks = bookList;
 				}
 				if(!StringUtils.isBlank(publisher)) {
 					flag =true;
 					listOfBooks = listOfBooks.stream().
 							filter(book -> (book.getActive() == Boolean.TRUE) && (book.getPublisher().equalsIgnoreCase(publisher))).collect(Collectors.toList());
 				}
-				else if(flag.equals(Boolean.FALSE) && listOfBooks.isEmpty()) {
+				if(flag.equals(Boolean.FALSE)) {
 					listOfBooks = new ArrayList<>();
 				}
 			}
@@ -128,6 +110,15 @@ public class BookServiceImpl implements BookService {
 		Book book = null;
 		Optional<Book> bookOptional = bookRepository.findById(bookId);
 		if(bookOptional.isPresent() && bookOptional.get().getAuthorUserName().equalsIgnoreCase(userName)) {
+			book = bookOptional.get();
+		}
+		return book;
+	}
+
+	public Book getBook(String title) {
+		Book book = null;
+		Optional<Book> bookOptional = bookRepository.findByTitle(title);
+		if(bookOptional.isPresent()) {
 			book = bookOptional.get();
 		}
 		return book;

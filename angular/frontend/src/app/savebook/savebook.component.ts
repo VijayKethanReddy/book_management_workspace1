@@ -50,14 +50,8 @@ export class SavebookComponent implements OnInit {
     observable.subscribe((response)=>{
       console.log(response);
       if(Number.isFinite(Number(response))){
-        if(Number(response) == 0){
-          this.errorMessage = "Book title "+title+" is already used. Please use different title to save the book";
-          this.successMessage = "";
-        }
-        else{
-          this.successMessage = "Book "+title+" is saved successfully";
-          this.errorMessage = "";
-        }
+        this.successMessage = "Book "+title+" is saved successfully";
+        this.errorMessage = "";
       }
       else{
         this.errorMessage = JSON.stringify(response);
@@ -66,7 +60,12 @@ export class SavebookComponent implements OnInit {
     },
     (error)=>{
       console.log("error :",error);
-      this.errorMessage = "Error occurred while saving the book. Please verify the details and save the book";
+      if(error.status == 409){
+        this.errorMessage = "Book title "+title+" is already used. Please use different title to save the book";
+      }
+      else{
+        this.errorMessage = "Error occurred while saving the book. Please verify the details and save the book";
+      }
       this.successMessage = "";
     })
   }

@@ -1,0 +1,51 @@
+<div class="form-horizontal">
+    <p class="form-center">Search Purchased Books</p>
+    <form name="form" (ngSubmit)="f.form.valid && searchPurchasedBookByPaymentId()" #f="ngForm" novalidate>
+        <div class="form-row">
+            <label class="col-sm-2 col-form-label">Payment Id</label>
+            <input name="paymentId" [(ngModel)] = 'form.paymentId' type='number' min="1" required #paymentId="ngModel"/>
+            <div class="alert-danger validationMessage" *ngIf="paymentId.errors && f.submitted">
+                <div *ngIf="paymentId.errors.required">payment Id is required</div>
+                <div *ngIf="paymentId.errors.min">
+                    payment Id must be at least 1
+                </div>
+            </div>
+        </div>
+        <div class="form-center">
+            <button class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    <div *ngIf="message == '' && isSearched == true">
+        <p class="successMessage">Search Result {{books.length}} records found</p>
+    </div>
+    <div *ngIf="isSearched!=true">
+        <p class="form-center">Purchased Books of Reader</p>
+    </div>
+</div>
+<div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-primary">
+                <th *ngFor="let column of displayedColumns">{{column}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-info" *ngFor="let book of books" (click)="tableRowClicked(book)">
+                <td>{{books.indexOf(book)+1}}</td>
+                <td>{{book.title}}</td>
+                <td>{{book.logo}}</td>
+                <td>{{book.category}}</td>
+                <td>{{book.authorUserName}}</td>
+                <td>{{book.authorName}}</td>
+                <td>{{book.price}}</td>
+                <td>{{book.publisher}}</td>
+                <td>{{book.publishedDate}}</td>
+                <td>{{book.content}}</td>
+                <td>{{book.active}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</ng-template>
+<ng-template #elseBlock><label class="form-horizontal form-center">{{message}}</label></ng-template>
