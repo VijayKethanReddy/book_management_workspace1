@@ -1,6 +1,0 @@
-com\book\BookRepository.class
-com\book\controller\BookController.class
-com\book\BookServiceApplication.class
-com\book\entity\Book.class
-com\book\controller\BaseController.class
-com\book\service\BookService.class
