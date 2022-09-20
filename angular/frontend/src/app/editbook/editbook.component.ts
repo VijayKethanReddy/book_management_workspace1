@@ -55,6 +55,9 @@ export class EditbookComponent implements OnInit {
     },
     (error)=>{
       console.log("error :",error);
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
       this.errorMessage = "Error occurred while updating the book. Please verify the details and update the book";
       this.successMessage = "";
     })

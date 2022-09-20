@@ -30,22 +30,17 @@
         <input type="date" name="publishedDate" [(ngModel)] = 'form.publishedDate' readonly/>
     </div>
     <div class="form-row">
-        <label class="col-sm-2 col-form-label">Content</label>
-        <input name="content" [(ngModel)] = 'form.content' readonly/>
-    </div>
-    <div class="form-row">
         <label class="col-sm-2 col-form-label">Active</label>
         <input name="active" [(ngModel)] = 'form.active' readonly/>
     </div>
-        <div class="form-center"> 
-            <div *ngIf="successMessage!=''">
-                <button class="btn btn-primary" [disabled]="true">Buy</button>
-            </div> 
-            <div *ngIf="successMessage ==''">
-                <button class="btn btn-primary">Buy</button>
-            </div>
-            
+    <div class="form-center"> 
+        <div *ngIf="successMessage!=''">
+            <button class="btn btn-primary" [disabled]="true">Buy</button>
+        </div> 
+        <div *ngIf="successMessage ==''">
+            <button class="btn btn-primary">Buy</button>
         </div>
+    </div>
 </form>
 <br>
 <div class="successMessage" *ngIf="errorMessage==''">

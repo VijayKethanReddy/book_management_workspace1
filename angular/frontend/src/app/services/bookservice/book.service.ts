@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import Book, { BookCategory } from 'src/app/entity/Book';
 import { TokenStorageService } from '../token-storage/token-storage.service';
 const API_URL = 'http://localhost:8082/digitalbooks';
@@ -10,7 +11,7 @@ export class BookService {
   book:Book= new Book('book1_url', 'Book1', BookCategory.ADVENTURE, 1, '', '', 'ABC Publisher', new Date(), 'This is book1 content', true);
   public book1: any;
   public user: any;
-  constructor(public client: HttpClient, private tokenStorageService: TokenStorageService) {
+  constructor(public client: HttpClient, private tokenStorageService: TokenStorageService, private router: Router) {
     this.user = this.tokenStorageService.getUser();
    }
 
@@ -62,4 +63,11 @@ export class BookService {
     return this.client.delete(API_URL + "/readers/" + readerId + "/books/" + bookId + "/refund");
   }
 
+  redirectTologin(){
+    this.tokenStorageService.signOut();
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
+  }
+  
 }

@@ -40,7 +40,10 @@ export class BuybookComponent implements OnInit {
     },
     (error)=>{
       console.log("error :",error);
-      if(error.status == 409){
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
+      else if(error.status == 409){
         this.errorMessage = "Book "+this.book1.title+" is already purchased";
       }
       else{

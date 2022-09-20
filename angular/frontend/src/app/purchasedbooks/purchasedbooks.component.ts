@@ -11,7 +11,7 @@ import { BookService } from '../services/bookservice/book.service';
 export class PurchasedbooksComponent implements OnInit {
   books: any = [];
   message: any = "";
-  displayedColumns: string[] = ['No.', 'Title', 'Logo URL', 'Category', 'Author UserName', 'Author Name', 'Price', 'Publisher', 'PublishedDate', 'Content', 'Active'];
+  displayedColumns: string[] = ['No.', 'Title', 'Logo URL', 'Category', 'Author UserName', 'Author Name', 'Price', 'Publisher', 'PublishedDate', 'Active'];
   column: any ="";
   form: any = {
     paymentId: 1
@@ -35,6 +35,9 @@ export class PurchasedbooksComponent implements OnInit {
       this.message = "";
     },
     (error)=>{
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
       this.message = "No purchased books found for reader";
       this.books = [];
     })
@@ -57,6 +60,9 @@ export class PurchasedbooksComponent implements OnInit {
       }
     },
     (error)=>{
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
       this.message = "No search results found. Please verify the payment id and search";
       this.books = [];
     })

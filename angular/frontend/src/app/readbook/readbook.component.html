@@ -29,7 +29,7 @@
             <label class="col-sm-2 col-form-label">Published Date</label>
             <input type="date" name="publishedDate" [(ngModel)] = 'form.publishedDate' readonly/>
         </div>
-        <div class="form-row">
+        <div *ngIf="form.active == true" class="form-row">
             <label class="col-sm-2 col-form-label">Content</label>
             <textarea name="content" [(ngModel)] = 'form.content' readonly></textarea>
         </div>
@@ -37,14 +37,17 @@
             <label class="col-sm-2 col-form-label">Active</label>
             <input name="active" [(ngModel)] = 'form.active' readonly/>
         </div>
-            <div class="form-center">
-                <div *ngIf="successMessage!=''">
-                    <button class="btn btn-primary" [disabled]="true">Refund</button>
-                </div> 
-                <div *ngIf="successMessage ==''">
-                    <button class="btn btn-primary">Refund</button>
-                </div>
+        <div *ngIf="form.active!=true" class="form-row">
+            <label class="validationMessage">Could not read book content as Author blocked the book.</label>
+        </div>
+        <div class="form-center">
+            <div *ngIf="successMessage!=''">
+                <button class="btn btn-primary" [disabled]="true">Refund</button>
+            </div> 
+            <div *ngIf="successMessage ==''">
+                <button class="btn btn-primary">Refund</button>
             </div>
+        </div>
     </form>
     <br>
     <div class="successMessage" *ngIf="errorMessage==''">

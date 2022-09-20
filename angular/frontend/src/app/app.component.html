@@ -1,47 +1,43 @@
 <!-- <app-bookform></app-bookform> -->
 <div>
-  <div style="display: inline-block; background-color: #e3f2fd;" class="navbar navbar-expand navbar-light">
-    <p>Digital Books</p>
-  </div>
-    <nav class="navbar navbar-expand navbar-light">
-        <a class="navbar-brand" routerLink='/' (click)='referenceName.isInitialHome=true'>Digital Books</a>
-        <ul class="navbar-nav mr-auto" routerLinkActive="active">
-          <li class="nav-item" *ngIf="showSearchBooks">
-            <a class="nav-link" routerLink="/bookform">Search Books</a>
-          </li>
-          <li class="nav-item" *ngIf="showPurchasedBooks">
-            <a class="nav-link" routerLink="/purchasedbooks">Purchased Books</a>
-          </li>
-          <li class="nav-item" *ngIf="showCreateBooks">
-            <a class="nav-link" routerLink="/savebook">CreateBooks</a>
-          </li>
-          <li class="nav-item" *ngIf="showGetAllAuthorBooks">
-            <a class="nav-link" routerLink="/getallauthorbooks">Get All Author Books</a>
-          </li>
-        </ul>
-    
-    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/register">Sign Up</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/login">Login</a>
-        </li>
-    </ul>
-  
-    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/profile">{{ username }}</a>
-        </li>
-        <li class="nav-item">
-          <a href class="nav-link" (click)="logout()">LogOut</a>
-        </li>
-    </ul>
-    </nav>
-  
-    <div class="container">
-      <router-outlet></router-outlet>
+  <nav class="navbar navbar-expand-md navbar-light">
+    <div style="display: inline-block;" class="navbar-nav me-auto">
+      <p>Digital Books</p>
     </div>
+    <ul class="navbar-nav ms-auto" routerLinkActive="active">
+      <li class="nav-item">
+        <a class="nav-link" routerLink='/' (click)='referenceName.isInitialHome=true'>Digital Books</a>
+      </li>
+      <li class="nav-item" *ngIf="showSearchBooks">
+        <a class="nav-link" routerLink="/bookform">Search Books</a>
+      </li>
+      <li class="nav-item" *ngIf="showPurchasedBooks">
+        <a class="nav-link" routerLink="/purchasedbooks">Purchased Books</a>
+      </li>
+      <li class="nav-item" *ngIf="showCreateBooks">
+        <a class="nav-link" routerLink="/savebook">CreateBooks</a>
+      </li>
+      <li class="nav-item" *ngIf="showGetAllAuthorBooks">
+        <a class="nav-link" routerLink="/getallauthorbooks">Get All Author Books</a>
+      </li>
+      <li class="nav-item" *ngIf="!isLoggedIn">
+        <a class="nav-link" routerLink="/register">Sign Up</a>
+      </li>
+      <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" routerLink="/login">Login</a>
+      </li>
+      <li class="nav-item" *ngIf="isLoggedIn">
+        <a class="nav-link" routerLink="/profile">{{ username }}</a>
+      </li>
+      <li class="nav-item" *ngIf="isLoggedIn">
+        <a href class="nav-link" (click)="logout()">LogOut</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
 </div>
 <br>
 <div *ngIf="referenceName.isInitialHome==true">

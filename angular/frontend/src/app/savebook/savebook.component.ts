@@ -30,7 +30,7 @@ export class SavebookComponent implements OnInit {
   errorMessage: any = "";
   isSuccessful = false;
 
-  constructor(public bookService: BookService) { 
+  constructor(public bookService: BookService, public appComponent: AppComponent) { 
     this.categoryList.push(this.bookCategory.ACTION);
     this.categoryList.push(this.bookCategory.ADVENTURE);
     this.categoryList.push(this.bookCategory.COMEDY);
@@ -60,6 +60,9 @@ export class SavebookComponent implements OnInit {
     },
     (error)=>{
       console.log("error :",error);
+      if(error.status == 401){
+        this.appComponent.logout();
+      }
       if(error.status == 409){
         this.errorMessage = "Book title "+title+" is already used. Please use different title to save the book";
       }

@@ -40,6 +40,9 @@ export class ReadbookComponent implements OnInit {
     },
     (error)=>{
       console.log("error :",error);
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
       this.errorMessage = "Failed to get refund for purchased book.";
       this.successMessage = "";
     })

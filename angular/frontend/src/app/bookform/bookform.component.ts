@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from '../services/bookservice/book.service';
-import Book, { BookCategory } from '../entity/Book';
-import { GetallauthorbooksComponent } from '../getallauthorbooks/getallauthorbooks.component';
+import { BookCategory } from '../entity/Book';
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 
@@ -20,7 +19,7 @@ export class BookformComponent implements OnInit {
   price: number = 1;
   publisher: String = 'ABC Publisher';
   message: any = "";
-  displayedColumns: string[] = ['No.', 'Title', 'Logo URL', 'Category', 'Author UserName', 'Author Name', 'Price', 'Publisher', 'PublishedDate', 'Content', 'Active'];
+  displayedColumns: string[] = ['No.', 'Title', 'Logo URL', 'Category', 'Author UserName', 'Author Name', 'Price', 'Publisher', 'PublishedDate', 'Active'];
   column: any ="";
   
   constructor(public bookService: BookService, private router: Router) {
@@ -53,6 +52,9 @@ export class BookformComponent implements OnInit {
       }
     },
     (error)=>{
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
       this.message = "No search results found. Please verify the details and search";
       this.books = [];
     })

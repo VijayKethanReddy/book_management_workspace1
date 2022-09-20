@@ -38,6 +38,9 @@ export class GetallauthorbooksComponent implements OnInit {
       this.message = "";
     },
     (error)=>{
+      if(error.status == 400){
+        this.bookService.redirectTologin();
+      }
       this.message = "No books found for author";
       this.books = [];
       this.authorName = "";
