@@ -1,2 +1,2 @@
 .metadata/
-!book-service/target
+*.jar
