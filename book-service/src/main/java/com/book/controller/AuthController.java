@@ -30,7 +30,17 @@ import com.book.request.SignupRequest;
 import com.book.response.JwtResponse;
 import com.book.response.MessageResponse;
 
-//@CrossOrigin(origins = "*", maxAge = 3600)
+/**
+ * 
+ * @author cogjava3180
+ * This is AuthController which run methods for book api
+ * authenticateUser method is used for sign in
+ * registerUser method is used for sign up
+ * 
+ * 
+ *
+ */
+
 @CrossOrigin
 @RestController
 @RequestMapping("/userauth")

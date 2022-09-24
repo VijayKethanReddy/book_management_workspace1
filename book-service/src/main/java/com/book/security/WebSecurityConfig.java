@@ -17,12 +17,17 @@ import com.book.security.jwt.AuthEntryPointJwt;
 import com.book.security.jwt.AuthTokenFilter;
 import com.book.security.service.impl.UserDetailsServiceImpl;
 
+/**
+ * 
+ * @author cogjava3180
+ * WebSecurityConfig bean is used for authentication
+ *
+ */
+
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired

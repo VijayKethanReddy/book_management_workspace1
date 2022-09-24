@@ -33,10 +33,15 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author cogjava3180
  * This is BookController which run methods for book api
- * getBook method is used for fetching book details for book id
- * searchBooks method is used for fetching all books which match conditions for category, author, price and publisher
+ * searchBooks method is used for fetching all books which match conditions for title, category, author, price and publisher
  * saveBook method is used for saving book with author id
- * saveAuthor method is used for saving author details
+ * getAllAuthorBooks method is used for fetching all author books with author id
+ * getAuthorBook method is used for fetching book with author id and book id
+ * buyBook method is used for purchasing book with book id and reader id
+ * findAllPurchasedBooks method is used for fetching all purchased books with reader id
+ * findPurchasedBookByPaymentId method is used for fetching purchased book with payment id and reader id
+ * getRefund method is used for refund with reader id and book id
+ * editBook method is used for editing book details with author id
  * 
  * 
  *
@@ -58,14 +63,10 @@ public class BookController extends BaseController {
 	RestTemplate restTemplate;
 	
 	@Autowired
-	BookAuthor bookAuthor;
-	
-	@Autowired
 	PaymentService paymentService;
 
 	@GetMapping("/books/search")
 	@PreAuthorize("hasRole('READER')")
-	//@PreAuthorize("hasRole('READER') or hasRole('AUTHOR')")
 	public ResponseEntity<List<Book>> searchBooks(@RequestParam String title, @RequestParam String category, 
 			@RequestParam String author, @RequestParam BigDecimal price, 
 			@RequestParam String publisher) {
@@ -79,24 +80,20 @@ public class BookController extends BaseController {
 	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> saveBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
 		ResponseEntity<Integer> response;
+		BookAuthor bookAuthor = new BookAuthor();
 		Book book1 = bookService.getBook(book.getTitle());
 		if(book1 == null) {
 			int bookId = 0;
 			User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
-			if(user!=null) {
-				book.setAuthorName(user.getName());
-				book.setAuthorUserName(user.getUserName());
-				book = bookService.saveBook(book);
-				bookId = book.getId();
-				response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
-				bookAuthor.setBook(book);
-				bookAuthor.setEmailId(user.getEmailId());
-				//ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
-				//log.debug(responseFromEmailService.getBody());
-			}
-			else {
-				response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
+			book.setAuthorName(user.getName());
+			book.setAuthorUserName(user.getUserName());
+			book = bookService.saveBook(book);
+			bookId = book.getId();
+			response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
+			bookAuthor.setBook(book);
+			bookAuthor.setEmailId(user.getEmailId());
+			ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
+			log.debug(responseFromEmailService.getBody());
 		}else {
 			response = new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
@@ -106,36 +103,24 @@ public class BookController extends BaseController {
 	@GetMapping("/author/{authorId}/allbooks")
 	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<List<Book>> getAllAuthorBooks(@PathVariable("authorId") int authorId) {
-		log.debug("Inside getBook method");
 		ResponseEntity<List<Book>> response;
 		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
-		if(user!=null) {
-			List<Book> listOfBooks = bookService.getAllAuthorBooks(user.getUserName());
-			response = new ResponseEntity<>(listOfBooks, HttpStatus.OK);
-		}
-		else {
-			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		List<Book> listOfBooks = bookService.getAllAuthorBooks(user.getUserName());
+		response = new ResponseEntity<>(listOfBooks, HttpStatus.OK);
 		return response;
 	}
 	
 	@GetMapping("/author/{authorId}/book/{bookId}")
 	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Book> getAuthorBook(@PathVariable("authorId") int authorId, @PathVariable("bookId") Integer bookId) {
-		log.debug("Inside getBook method");
 		ResponseEntity<Book> response;
 		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
-		if(user!=null) {
-			Book authorBook = bookService.getAuthorBook(bookId, user.getUserName());
-			if(authorBook == null) {
-				response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			else {
-				response = new ResponseEntity<>(authorBook, HttpStatus.OK);
-			}
+		Book authorBook = bookService.getAuthorBook(bookId, user.getUserName());
+		if(authorBook == null) {
+			response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		else {
-			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			response = new ResponseEntity<>(authorBook, HttpStatus.OK);
 		}
 		return response;
 	}
@@ -147,26 +132,16 @@ public class BookController extends BaseController {
 		Book purchasedBook = paymentService.getPurchasedBook(bookId, readerId);
 		if(purchasedBook == null) {
 			Book book = bookService.getBook(bookId);
-			if(book!=null) {
-				User user = userService.getUser(readerId, ERole.ROLE_READER);
-				if(user!=null) {
-					Payment payment = new Payment();
-					payment.setPurchasedBook(book);
-					payment.setReaderUserId(user.getId());
-					payment.setReaderUserName(user.getUserName());
-					payment.setEmailId(user.getEmailId());
-					payment.setPurchasedDate(LocalDate.now());
-					paymentService.buyBook(payment);
-					int paymentId = payment.getId();
-					response = new ResponseEntity<>(paymentId, HttpStatus.CREATED);
-				}
-				else {
-					response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-				}
-			}
-			else {
-				response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
+			User user = userService.getUser(readerId, ERole.ROLE_READER);
+			Payment payment = new Payment();
+			payment.setPurchasedBook(book);
+			payment.setReaderUserId(user.getId());
+			payment.setReaderUserName(user.getUserName());
+			payment.setEmailId(user.getEmailId());
+			payment.setPurchasedDate(LocalDate.now());
+			payment = paymentService.buyBook(payment);
+			int paymentId = payment.getId();
+			response = new ResponseEntity<>(paymentId, HttpStatus.CREATED);
 		}
 		else {
 			response = new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -186,7 +161,6 @@ public class BookController extends BaseController {
 	@GetMapping("/readers/{readerId}/books/{bookId}")
 	@PreAuthorize("hasRole('READER')")
 	public ResponseEntity<Book> findPurchasedBookByBookId(@PathVariable("readerId") int readerId, @PathVariable("bookId") Integer bookId) {
-		log.debug("Inside getBook method");
 		ResponseEntity<Book> response;
 		Book purchasedBook = paymentService.getPurchasedBook(bookId, readerId);
 		if(purchasedBook == null) {
@@ -217,7 +191,6 @@ public class BookController extends BaseController {
 	public ResponseEntity<Integer> getRefund(@PathVariable("readerId") int readerId, @PathVariable("bookId") int bookId) {
 		ResponseEntity<Integer> response;
 		Integer refund = paymentService.getRefund(readerId, bookId);
-		//if(Boolean.TRUE.equals(refund)) {
 		if(refund!=0) {
 			response = new ResponseEntity<>(refund, HttpStatus.OK);
 		}
@@ -231,38 +204,19 @@ public class BookController extends BaseController {
 	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> editBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
 		ResponseEntity<Integer> response;
+		BookAuthor bookAuthor = new BookAuthor();
 		int bookId = 0;
 		User user = userService.getUser(authorId, ERole.ROLE_AUTHOR);
-		if(user!=null) {
-			book.setAuthorName(user.getName());
-			book.setAuthorUserName(user.getUserName());
-			book = bookService.saveBook(book);
-			if(book != null) {
-				bookId = book.getId();
-			}
-			response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
-			bookAuthor.setBook(book);
-			bookAuthor.setEmailId(user.getEmailId());
-			//ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
-			//log.debug(responseFromEmailService.getBody());
+		book.setAuthorName(user.getName());
+		book.setAuthorUserName(user.getUserName());
+		book = bookService.saveBook(book);
+		if(book != null) {
+			bookId = book.getId();
 		}
-		else {
-			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
+		bookAuthor.setBook(book);
+		bookAuthor.setEmailId(user.getEmailId());
 		return response;
 	}
 	
-//	@PostMapping("/author/signup")
-//	public ResponseEntity<Integer> saveAuthor(@Valid @RequestBody User user) {
-//		ResponseEntity<Integer> response;
-//		User user1 = userService.saveAuthor(user);
-//		if(user1!=null) {
-//			int authorId = user1.getId();
-//			response = new ResponseEntity<>(authorId, HttpStatus.CREATED);
-//		}
-//		else {
-//			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//		return response;
-//	}
 }

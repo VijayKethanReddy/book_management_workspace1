@@ -3,11 +3,9 @@ package com.book;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.book.entity.Book;
 import com.book.entity.BookCategory;
-import com.book.entity.Payment;
 
 /**
  * 

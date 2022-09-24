@@ -27,12 +27,15 @@ export class PurchasedbooksComponent implements OnInit {
   }
 
   getAllPurchasedBooks(){
-    console.log("clicked");
     const observable = this.bookService.getAllPurchasedBooks();
     observable.subscribe((books)=>{
-      console.log(books);
       this.books = books;
-      this.message = "";
+      if(this.books.length == 0){
+        this.message = "No purchased books found for reader";
+      }
+      else{
+        this.message = "";
+      }
     },
     (error)=>{
       if(error.status == 400){
@@ -44,12 +47,10 @@ export class PurchasedbooksComponent implements OnInit {
   }
 
   searchPurchasedBookByPaymentId(){
-    console.log("clicked");
     this.isSearched = true;
     const { paymentId } = this.form;
     const observable = this.bookService.searchPurchasedBookByPaymentId(paymentId);
     observable.subscribe((books)=>{
-      console.log(books);
       this.books = [];
       if(books == null){
         this.message = "No search results found. Please verify the payment id and search";
@@ -69,8 +70,6 @@ export class PurchasedbooksComponent implements OnInit {
   }
 
   tableRowClicked(book: any){
-    console.log("clicked");
-    console.log(book);
     this.bookService.book1 = book; 
     this.router.navigate(['/readbook']);
   }

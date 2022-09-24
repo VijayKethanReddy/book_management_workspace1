@@ -2,6 +2,13 @@ package com.book.request;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 
+ * @author cogjava3180
+ * LoginRequest bean is used for declaring login details
+ *
+ */
+
 public class LoginRequest {
 	@NotBlank
 	private String userName;

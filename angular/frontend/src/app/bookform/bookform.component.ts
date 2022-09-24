@@ -14,7 +14,7 @@ export class BookformComponent implements OnInit {
   bookCategory = BookCategory;
   books: any = [];
   title: String = 'Book1';
-  category: BookCategory = BookCategory.ADVENTURE;
+  category: String = '';
   author: String = 'David';
   price: number = 1;
   publisher: String = 'ABC Publisher';
@@ -36,14 +36,11 @@ export class BookformComponent implements OnInit {
   }
 
   searchBooks(){
-    console.log("clicked");
     if(this.price == null || this.price == undefined){
       this.price = 0;
     }
     const observable = this.bookService.searchBooks(this.title, this.category, this.author, this.price, this.publisher);
     observable.subscribe((books)=>{
-      console.log(books);
-      this.books = books;
       this.books = books;
       this.message = "";
       if(this.books.length == 0){
@@ -61,8 +58,6 @@ export class BookformComponent implements OnInit {
   }
 
   tableRowClicked(book: any){
-    console.log("clicked");
-    console.log(book);
     this.bookService.book1 = book; 
     this.router.navigate(['/buybook']);
   }

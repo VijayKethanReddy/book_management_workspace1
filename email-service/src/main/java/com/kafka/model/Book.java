@@ -35,8 +35,8 @@ public class Book {
 	
 	private String publisher;
 	
-	@DateTimeFormat(style = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(style = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate publishedDate;
 	
 	private String content;

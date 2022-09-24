@@ -9,6 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.book.UserRepository;
 import com.book.entity.User;
 
+/**
+ * 
+ * @author cogjava3180
+ * UserDetailsServiceImpl is used for fetching user with user details
+ *
+ */
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired

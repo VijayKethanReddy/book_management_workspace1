@@ -24,13 +24,11 @@ export class BuybookComponent implements OnInit {
   }
 
   buy(): void{
-    console.log("clicked");
     this.book1 = this.form;
     const observable = this.bookService.buyBook(this.book1.id);
     observable.subscribe((response)=>{
-      console.log(response);
       if(Number.isFinite(Number(response))){
-        this.successMessage = "Book "+this.book1.title+" is purchased successfully";
+        this.successMessage = "Book "+this.book1.title+" is purchased successfully with payment id "+response;
         this.errorMessage = "";
       }
       else{
@@ -39,7 +37,6 @@ export class BuybookComponent implements OnInit {
       }
     },
     (error)=>{
-      console.log("error :",error);
       if(error.status == 400){
         this.bookService.redirectTologin();
       }

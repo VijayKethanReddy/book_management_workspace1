@@ -1,10 +1,8 @@
 package com.book.service.impl;
 
 import java.util.Optional;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.book.RoleRepository;
 import com.book.UserRepository;
 import com.book.constants.BookConstants;
@@ -17,8 +15,7 @@ import com.book.service.UserService;
  * 
  * @author cogjava3180
  * This is UserServiceImpl which is used for running methods from controller
- * getAuthor method is used for fetching user details for user id
- * saveAuthor method is used for saving user details
+ * getUser method is used for fetching user with user id and role
  *
  */
 
@@ -37,15 +34,10 @@ public class UserServiceImpl implements UserService{
 		Role userRole = roleRepository.findByName(roleUser)
 				.orElseThrow(() -> new RuntimeException(BookConstants.ERROR_ROLE_NOT_FOUND_MSG));
 		Optional<User> userOptional = userRepository.findById(userId);
-		if(userOptional.isPresent() && userOptional.get().getRoles().contains(userRole)) {
+		if(userOptional.isPresent() && userOptional.get().getRoles().stream().anyMatch(r -> r.getName().equals(userRole.getName()))) {
 			user = userOptional.get();
 		}
 		return user;
 	}
-	
-//	@Override
-//	public User saveAuthor(@Valid User user) {
-//		return userRepository.save(user);
-//	}
 
 }

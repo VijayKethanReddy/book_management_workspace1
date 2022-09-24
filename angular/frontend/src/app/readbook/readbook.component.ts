@@ -24,11 +24,9 @@ export class ReadbookComponent implements OnInit {
   }
 
   refund(): void{
-    console.log("clicked");
     this.book1 = this.form;
     const observable = this.bookService.getRefund(this.book1.id);
     observable.subscribe((response)=>{
-      console.log(response);
       if(Number.isFinite(Number(response))){
         this.successMessage = "Refund is successful. Book "+this.book1.title+" is removed from purchased book list";
         this.errorMessage = "";
@@ -39,7 +37,6 @@ export class ReadbookComponent implements OnInit {
       }
     },
     (error)=>{
-      console.log("error :",error);
       if(error.status == 400){
         this.bookService.redirectTologin();
       }

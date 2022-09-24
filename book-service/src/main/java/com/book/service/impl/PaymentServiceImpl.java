@@ -19,8 +19,11 @@ import com.book.service.PaymentService;
  * 
  * @author cogjava3180
  * This is PaymentServiceImpl which is used for running methods from controller
- * getAuthor method is used for fetching user details for user id
- * saveAuthor method is used for saving user details
+ * buyBook method is used for saving payment details
+ * getPurchasedBook method is used for fetching book with book id and reader id
+ * findAllPurchasedBooks method is used for fetching all purchased books with reader id
+ * findPurchasedBookByPaymentId method is used for fetching book with payment id and reader id
+ * getRefund method is used for refund with reader id and book id
  *
  */
 
@@ -59,8 +62,7 @@ public class PaymentServiceImpl implements PaymentService{
 		List<Book> listOfPurchasedBooks = new ArrayList<>();
 		Optional<List<Payment>> paymentListOptional = paymentRepository.findByReaderUserId(readerId);
 		if(paymentListOptional.isPresent()) {
-			//listOfPurchasedBooks = purchasedBookListOptional.get();
-			listOfPurchasedBooks = paymentListOptional.get().stream().map(p -> p.getPurchasedBook()).collect(Collectors.toList());
+			listOfPurchasedBooks = paymentListOptional.get().stream().map(Payment::getPurchasedBook).collect(Collectors.toList());
 		}
 		return listOfPurchasedBooks;
 	}

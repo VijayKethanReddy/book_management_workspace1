@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from '../app.component';
-import Book from '../entity/Book';
 import { BookService } from '../services/bookservice/book.service';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage/token-storage.service';
@@ -24,32 +23,31 @@ export class GetallauthorbooksComponent implements OnInit {
   ngOnInit(): void {
     const user = this.tokenStorageService.getUser();
     this.authorName = user.name;
-    console.log("user id: "+user.id);
     this.getAllAuthorBooks();
   }
 
   getAllAuthorBooks(){
-    console.log("clicked");
     const observable = this.bookService.getAllAuthorBooks();
     observable.subscribe((books)=>{
-      console.log(books);
       this.books = books;
-      // this.authorName = this.books[0].authorName;
-      this.message = "";
+      if(this.books.length == 0){
+        this.message = "No books found for author " + this.authorName;
+      }
+      else{
+        this.message = "";
+      }
     },
     (error)=>{
       if(error.status == 400){
         this.bookService.redirectTologin();
       }
-      this.message = "No books found for author";
+      this.message = "No books found for author " + this.authorName;
       this.books = [];
       this.authorName = "";
     })
   }
 
   tableRowClicked(book: any){
-    console.log("clicked");
-    console.log(book);
     this.bookService.book1 = book; 
     this.router.navigate(['/editbook']);
   }

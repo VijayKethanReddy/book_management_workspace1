@@ -92,9 +92,26 @@
             </div>
           </div>
         </div>
-        <br>
         <div class="form-group">
-          <button class="btn btn-primary btn-block">Sign Up</button>
+          <label>Roles</label>
+          <div class="form-control" style="display:inline;">
+            <input style="display:inline-block;" type="checkbox" name="author" [(ngModel)]="form.author" value=true #author="ngModel"/>
+            &nbsp;
+            <label style="display:inline-block;" for="author">Author Role</label>
+            &nbsp;
+            <input style="display:inline-block;" type="checkbox" name="reader" [(ngModel)]="form.reader" value=true #reader="ngModel"/>
+            &nbsp;
+            <label style="display:inline-block;" for="reader">Reader Role</label>
+          </div>
+        </div>
+        <br>
+        <div class="form-group"> 
+          <div *ngIf="form.author!=true && form.reader!=true">
+              <button class="btn btn-primary btn-block" [disabled]="true">Sign Up</button>
+          </div> 
+          <div *ngIf="form.author == true || form.reader == true">
+              <button class="btn btn-primary btn-block">Sign Up</button>
+          </div>
         </div>
   
         <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">

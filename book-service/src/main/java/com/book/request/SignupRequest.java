@@ -3,6 +3,13 @@ package com.book.request;
 import java.util.Set;
 import javax.validation.constraints.*;
 
+/**
+ * 
+ * @author cogjava3180
+ * SignupRequest bean is used for declaring sign up details
+ *
+ */
+
 public class SignupRequest {
 	
 	@NotBlank(message = "name cannot be blank#######")

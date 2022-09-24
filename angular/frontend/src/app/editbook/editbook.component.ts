@@ -33,11 +33,9 @@ export class EditbookComponent implements OnInit {
   }
 
   edit(): void{
-    console.log("clicked");
     this.book1 = this.form;
     const observable = this.bookService.editBook(this.book1);
     observable.subscribe((response)=>{
-      console.log(response);
       if(Number.isFinite(Number(response))){
         if(Number(response) == 0){
           this.errorMessage = "Error occurred while updating the book. Please verify the details and update the book";
@@ -54,7 +52,6 @@ export class EditbookComponent implements OnInit {
       }
     },
     (error)=>{
-      console.log("error :",error);
       if(error.status == 400){
         this.bookService.redirectTologin();
       }

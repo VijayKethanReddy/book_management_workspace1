@@ -20,7 +20,6 @@ export class SavebookComponent implements OnInit {
     authorName: this.book.authorName,
     publisher: this.book.publisher,
     publishedDate: null,
-    //publishedDate: this.book.publishedDate,
     content: this.book.content,
     active: this.book.active
   };
@@ -30,7 +29,7 @@ export class SavebookComponent implements OnInit {
   errorMessage: any = "";
   isSuccessful = false;
 
-  constructor(public bookService: BookService, public appComponent: AppComponent) { 
+  constructor(public bookService: BookService) { 
     this.categoryList.push(this.bookCategory.ACTION);
     this.categoryList.push(this.bookCategory.ADVENTURE);
     this.categoryList.push(this.bookCategory.COMEDY);
@@ -44,11 +43,9 @@ export class SavebookComponent implements OnInit {
   }
 
   save(): void{
-    console.log("clicked");
     const { title, logo, category, price, authorUserName, authorName, publisher, publishedDate, content, active } = this.form;
     const observable = this.bookService.saveBook(title, logo, category, price, authorUserName, authorName, publisher, publishedDate, content, active);
     observable.subscribe((response)=>{
-      console.log(response);
       if(Number.isFinite(Number(response))){
         this.successMessage = "Book "+title+" is saved successfully";
         this.errorMessage = "";
@@ -59,9 +56,8 @@ export class SavebookComponent implements OnInit {
       }
     },
     (error)=>{
-      console.log("error :",error);
-      if(error.status == 401){
-        this.appComponent.logout();
+      if(error.status == 400){
+        this.bookService.redirectTologin();
       }
       if(error.status == 409){
         this.errorMessage = "Book title "+title+" is already used. Please use different title to save the book";

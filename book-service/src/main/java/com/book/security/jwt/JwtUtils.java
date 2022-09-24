@@ -9,6 +9,13 @@ import org.springframework.stereotype.Component;
 import com.book.security.service.impl.UserDetailsImpl;
 import io.jsonwebtoken.*;
 
+/**
+ * 
+ * @author cogjava3180
+ * JwtUtils is used for processing token
+ *
+ */
+
 @Component
 public class JwtUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);

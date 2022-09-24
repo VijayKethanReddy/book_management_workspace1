@@ -4,3 +4,20 @@ p{
     font-size: large;
     text-decoration: none;
 }
+
+.validationMessage{
+    color:red;
+}
+
+.successMessage{
+    color: green;
+}
+.form-horizontal{
+    display:block;
+    width:50%;
+    margin:0 auto;
+}
+.form-center{
+    padding-left: 120px;
+    padding-top: 20px;
+}

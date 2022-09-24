@@ -8,7 +8,7 @@ import com.book.entity.Payment;
 /**
  * 
  * @author cogjava3180
- * This is UserService interface which used for defining user details methods
+ * This is PaymentService interface which used for defining payment details methods
  *
  */
 

@@ -18,9 +18,10 @@
     <div *ngIf="message == '' && isSearched == true">
         <p class="successMessage">Search Result {{books.length}} records found</p>
     </div>
-    <div *ngIf="isSearched!=true">
+    <div *ngIf="isSearched!=true && books.length>0">
         <p class="form-center">Purchased Books of Reader</p>
     </div>
+
 </div>
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
@@ -47,4 +48,4 @@
     </table>
 
 </ng-template>
-<ng-template #elseBlock><label class="form-horizontal form-center">{{message}}</label></ng-template>
+<ng-template #elseBlock><label class="form-horizontal form-center validationMessage">{{message}}</label></ng-template>

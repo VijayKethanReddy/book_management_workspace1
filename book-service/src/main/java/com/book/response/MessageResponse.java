@@ -1,5 +1,12 @@
 package com.book.response;
 
+/**
+ * 
+ * @author cogjava3180
+ * MessageResponse bean is used for declaring response details
+ *
+ */
+
 public class MessageResponse {
 	private String message;
 

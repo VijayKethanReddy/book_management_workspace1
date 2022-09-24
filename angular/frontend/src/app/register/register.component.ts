@@ -12,11 +12,14 @@ export class RegisterComponent implements OnInit {
     name: null,
     userName: null,
     emailId: null,
-    password: null
+    password: null,
+    author: false,
+    reader: false
   };
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
+  role:string[]=[];
 
   constructor(private authService: AuthService) { 
     AppComponent.isInitialHome=false;
@@ -26,11 +29,10 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { name, userName, emailId, password } = this.form;
-
-    this.authService.register(name, userName, emailId, password).subscribe(
+    const { name, userName, emailId, password, author, reader } = this.form;
+    this.role=(author && reader) ? ["author","reader"]:author?["author"]:reader?["reader"]:[];
+    this.authService.register(name, userName, emailId, password, this.role).subscribe(
       response => {
-        console.log(response);
         this.isSuccessful = true;
         this.isSignUpFailed = false;
       },

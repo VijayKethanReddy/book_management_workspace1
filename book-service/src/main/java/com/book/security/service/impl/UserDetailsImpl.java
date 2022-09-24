@@ -10,6 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.book.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * 
+ * @author cogjava3180
+ * UserDetailsImpl is used for processing of user details
+ *
+ */
+
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 

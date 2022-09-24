@@ -1,5 +1,5 @@
-<div *ngIf="authorName!= ''">
-    <p>All Books of Author {{authorName}}</p>
+<div class="form-horizontal" *ngIf="authorName!= '' && books.length>0">
+    <p class="form-center">All Books of Author {{authorName}}</p>
 </div>
 <div *ngIf="books.length>0; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
@@ -27,4 +27,4 @@
     </table>
 
 </ng-template>
-<ng-template #elseBlock><label >{{message}}</label></ng-template>
+<ng-template #elseBlock><div class="form-horizontal"><label class="form-center validationMessage">{{message}}</label></div></ng-template>

@@ -2,6 +2,13 @@ package com.book.entity;
 
 import javax.persistence.*;
 
+/**
+ * 
+ * @author cogjava3180
+ * Role bean is used for declaring role details
+ *
+ */
+
 @Entity
 @Table(name = "roles")
 public class Role {

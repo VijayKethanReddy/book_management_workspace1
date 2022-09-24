@@ -2,6 +2,13 @@ package com.book.response;
 
 import java.util.List;
 
+/**
+ * 
+ * @author cogjava3180
+ * JwtResponse bean is used for declaring response details
+ *
+ */
+
 public class JwtResponse {
 	private String token;
 	private String type = "Bearer";
