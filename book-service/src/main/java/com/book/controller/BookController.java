@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,6 +65,9 @@ public class BookController extends BaseController {
 	
 	@Autowired
 	PaymentService paymentService;
+	
+	@Value("${book.app.emailServiceEnabled}")
+	private Boolean emailServiceEnabled;
 
 	@GetMapping("/books/search")
 	@PreAuthorize("hasRole('READER')")
@@ -79,6 +83,7 @@ public class BookController extends BaseController {
 	@PostMapping("/author/{authorId}/books")
 	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> saveBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
+		log.debug("emailServiceEnabled:"+emailServiceEnabled);
 		ResponseEntity<Integer> response;
 		BookAuthor bookAuthor = new BookAuthor();
 		Book book1 = bookService.getBook(book.getTitle());
@@ -90,10 +95,12 @@ public class BookController extends BaseController {
 			book = bookService.saveBook(book);
 			bookId = book.getId();
 			response = new ResponseEntity<>(bookId, HttpStatus.CREATED);
-			bookAuthor.setBook(book);
-			bookAuthor.setEmailId(user.getEmailId());
-			ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
-			log.debug(responseFromEmailService.getBody());
+			if(Boolean.TRUE.equals(emailServiceEnabled)) {
+				bookAuthor.setBook(book);
+				bookAuthor.setEmailId(user.getEmailId());
+				ResponseEntity<String> responseFromEmailService = restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class);
+				log.debug(responseFromEmailService.getBody());
+			}
 		}else {
 			response = new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
