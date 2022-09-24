@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 import com.book.RoleRepository;
 import com.book.UserRepository;
@@ -173,6 +174,7 @@ class BookControllerTest {
 		String title = "book1";
 		BookAuthor bookAuthor = getBookAuthor();
 		ResponseEntity<String> response = new ResponseEntity<String>("email sent", HttpStatus.OK);
+		ReflectionTestUtils.setField(controller, "emailServiceEnabled", false);
 		when(userService.getUser(authorId, ERole.ROLE_AUTHOR)).thenReturn(author);
 		when(bookService.getBook(title)).thenReturn(book1);
 		when(bookService.saveBook(book)).thenReturn(book);
@@ -183,15 +185,20 @@ class BookControllerTest {
 	
 	@Test
 	void testSaveBook1() {
-		User author = null;
+		User author = getAuthor();
 		Book book = getBook();
 		Book book1 = null;
-		int authorId = 2;
+		int authorId = 1;
 		String title = "book1";
+		BookAuthor bookAuthor = getBookAuthor();
+		ResponseEntity<String> response = new ResponseEntity<String>("email sent", HttpStatus.OK);
+		ReflectionTestUtils.setField(controller, "emailServiceEnabled", true);
 		when(userService.getUser(authorId, ERole.ROLE_AUTHOR)).thenReturn(author);
 		when(bookService.getBook(title)).thenReturn(book1);
-		ResponseEntity<Integer> savedbookId = controller.saveBook(2, book);
-		assertEquals(HttpStatus.BAD_REQUEST, savedbookId.getStatusCode());
+		when(bookService.saveBook(book)).thenReturn(book);
+		when(restTemplate.postForEntity(BookConstants.SEND_EMAIL_URL, bookAuthor, String.class)).thenReturn(response);
+		ResponseEntity<Integer> savedbookId = controller.saveBook(1, book);
+		assertEquals(1, savedbookId.getBody());
 	}
 	
 	@Test
@@ -233,15 +240,6 @@ class BookControllerTest {
 	}
 	
 	@Test
-	void testGetAllAuthorBooks1() {
-		User author = null;
-		Integer authorId=2;
-		when(userService.getUser(authorId, ERole.ROLE_AUTHOR)).thenReturn(author);
-		ResponseEntity<List<Book>> actual= controller.getAllAuthorBooks(authorId);
-		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
-	}
-	
-	@Test
 	void testGetAuthorBook() {
 		User author = getAuthor();
 		Book book = getBook();
@@ -266,16 +264,6 @@ class BookControllerTest {
 	}
 	
 	@Test
-	void testGetAuthorBook2() {
-		User author = null;
-		Integer bookId=1;
-		Integer authorId=2;
-		when(userService.getUser(authorId, ERole.ROLE_AUTHOR)).thenReturn(author);
-		ResponseEntity<Book> actual= controller.getAuthorBook(authorId, bookId);
-		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
-	}
-	
-	@Test
 	void testBuyBook() {
 		User user = getReader();
 		Book purchasedBook = null;
@@ -291,32 +279,6 @@ class BookControllerTest {
 		when(paymentService.buyBook(payment1)).thenReturn(payment);
 		ResponseEntity<Integer> savedpaymentId = controller.buyBook(bookId, readerId);
 		assertEquals(1, savedpaymentId.getBody());
-	}
-	
-	@Test
-	void testBuyBook1() {
-		User user = null;
-		Book purchasedBook = null;
-		Book book = getBook();
-		Integer bookId = 1;
-		Integer readerId = 2;
-		when(paymentService.getPurchasedBook(bookId, readerId)).thenReturn(purchasedBook);
-		when(bookService.getBook(bookId)).thenReturn(book);
-		when(userService.getUser(readerId, ERole.ROLE_READER)).thenReturn(user);
-		ResponseEntity<Integer> savedpaymentId = controller.buyBook(bookId, readerId);
-		assertEquals(HttpStatus.BAD_REQUEST, savedpaymentId.getStatusCode());
-	}
-	
-	@Test
-	void testBuyBook2() {
-		Book purchasedBook = null;
-		Book book = null;
-		Integer bookId = 2;
-		Integer readerId = 1;
-		when(paymentService.getPurchasedBook(bookId, readerId)).thenReturn(purchasedBook);
-		when(bookService.getBook(bookId)).thenReturn(book);
-		ResponseEntity<Integer> savedpaymentId = controller.buyBook(bookId, readerId);
-		assertEquals(HttpStatus.BAD_REQUEST, savedpaymentId.getStatusCode());
 	}
 	
 	@Test
@@ -409,16 +371,6 @@ class BookControllerTest {
 		when(bookService.saveBook(book)).thenReturn(book);
 		ResponseEntity<Integer> savedbookId = controller.editBook(1, book);
 		assertEquals(1, savedbookId.getBody());
-	}
-	
-	@Test
-	void testEditBook1() {
-		User author = null;
-		Book book = getBook();
-		int authorId = 2;
-		when(userService.getUser(authorId, ERole.ROLE_AUTHOR)).thenReturn(author);
-		ResponseEntity<Integer> savedbookId = controller.editBook(2, book);
-		assertEquals(HttpStatus.BAD_REQUEST, savedbookId.getStatusCode());
 	}
 	
 	@Test

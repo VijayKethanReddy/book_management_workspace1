@@ -83,7 +83,6 @@ public class BookController extends BaseController {
 	@PostMapping("/author/{authorId}/books")
 	@PreAuthorize("hasRole('AUTHOR')")
 	public ResponseEntity<Integer> saveBook(@PathVariable("authorId") int authorId, @Valid @RequestBody Book book) {
-		log.debug("emailServiceEnabled:"+emailServiceEnabled);
 		ResponseEntity<Integer> response;
 		BookAuthor bookAuthor = new BookAuthor();
 		Book book1 = bookService.getBook(book.getTitle());
