@@ -2,6 +2,7 @@ package com.book.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +23,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
@@ -36,7 +45,12 @@ import com.book.service.impl.BookServiceImpl;
 import com.book.service.impl.PaymentServiceImpl;
 import com.book.service.impl.UserServiceImpl;
 import org.mockito.quality.Strictness;
+
+import com.book.request.LoginRequest;
 import com.book.request.SignupRequest;
+import com.book.response.JwtResponse;
+import com.book.security.jwt.JwtUtils;
+import com.book.security.service.impl.UserDetailsImpl;
 
 /**
  * 
@@ -65,6 +79,15 @@ class BookControllerTest {
 	
 	@Mock
 	PasswordEncoder encoder;
+	
+	@Mock
+	AuthenticationManager authenticationManager;
+	
+	@Mock
+	JwtUtils jwtUtils;
+	
+	@Mock
+	Authentication authentication;
 	
 	@InjectMocks
 	BookController controller;
@@ -452,6 +475,39 @@ class BookControllerTest {
 		when(userRepository.existsByEmailId(signUpRequest.getEmailId())).thenReturn(true);
 		actual = authController.registerUser(signUpRequest);
 		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+	}
+	
+	@Test
+    void testAuthenticateUser() throws Exception {
+        LoginRequest loginRequest =new LoginRequest();
+        loginRequest.setUserName("user");
+        loginRequest.setPassword("pass");
+        String token = "token*****";
+        when(authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword())))
+        .thenReturn(authentication);
+        List<String> roles= new ArrayList<String>();
+        roles.add("ROLE_AUTHOR");
+        
+        List<Role> listOfRoles = new ArrayList<>();
+        listOfRoles.add(getAuthorRole());
+        List<GrantedAuthority> authorities = listOfRoles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList());
+        
+        UserDetailsImpl userDetails=new UserDetailsImpl(1, "name", "username", "email", "password", authorities);
+        when(authentication.getPrincipal())
+        .thenReturn(userDetails);
+        when(jwtUtils.generateJwtToken(authentication))
+        .thenReturn(token);
+        ResponseEntity<?> actual = authController.authenticateUser(loginRequest);
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertTrue(EqualsBuilder.reflectionEquals(new JwtResponse(token, 
+				 userDetails.getId(), 
+				 userDetails.getName(),
+				 userDetails.getUsername(), 
+				 userDetails.getEmailId(), 
+				 roles),actual.getBody()));
 	}
 	
 }
