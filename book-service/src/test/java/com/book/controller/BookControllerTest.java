@@ -55,7 +55,7 @@ import com.book.security.service.impl.UserDetailsImpl;
 /**
  * 
  * @author cogjava3180
- * This is BookControllerTest which is used for testing BookController methods and register method in AuthController
+ * This is BookControllerTest which is used for testing BookController methods and register and login methods in AuthController
  *
  */
 
